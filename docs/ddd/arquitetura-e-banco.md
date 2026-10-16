@@ -15,12 +15,12 @@ Os diretórios concretos serão criados conforme cada caso de uso for implementa
 
 ## Contextos e agregados
 
-| Contexto | Agregado principal | Invariantes sob sua responsabilidade |
+| Contexto proposto | Raízes de agregados | Invariantes sob sua responsabilidade |
 | --- | --- | --- |
 | Atendimento | Cliente e Veículo | Documento válido e único; placa válida e única; vínculo do veículo ao cliente. |
 | Catálogo | Serviço e Material | Definição de preço, tipo e unidade; material distingue peça de insumo. |
 | Ordens de Serviço | OS | Status, itens, diagnóstico, versões de orçamento e decisão do cliente. |
-| Estoque | Saldo de Material | Saldo não negativo e movimentação rastreável. |
+| Estoque | Saldo de Material | Saldo não negativo e movimentação rastreável; o saldo referencia o material do catálogo. |
 
 Esses são limites lógicos **dentro do mesmo monólito**, não serviços distribuídos. Uma OS referencia cadastros de outros contextos por identificador; copia os valores relevantes para seu histórico. A execução coordena OS e estoque numa transação do banco.
 

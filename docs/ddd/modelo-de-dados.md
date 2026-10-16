@@ -8,14 +8,16 @@ erDiagram
     CLIENTES ||--o{ ORDENS_SERVICO : solicita
     VEICULOS ||--o{ ORDENS_SERVICO : atendido_em
     ORDENS_SERVICO ||--o{ ITENS_OS : contem
-    SERVICOS ||--o{ ITENS_OS : referencia
-    MATERIAIS ||--o{ ITENS_OS : referencia
+    SERVICOS |o--o{ ITENS_OS : referencia
+    MATERIAIS |o--o{ ITENS_OS : referencia
     ORDENS_SERVICO ||--o{ ORCAMENTOS : possui_versoes
     ORCAMENTOS ||--o{ ITENS_ORCAMENTO : fotografa
     MATERIAIS ||--o{ MOVIMENTACOES_ESTOQUE : movimenta
-    ORDENS_SERVICO ||--o{ MOVIMENTACOES_ESTOQUE : justifica
+    ORDENS_SERVICO |o--o{ MOVIMENTACOES_ESTOQUE : justifica
     ORDENS_SERVICO ||--o{ HISTORICO_STATUS : registra
 ```
+
+Cada item da OS referencia exatamente um serviço ou um material; as duas relações opcionais do diagrama são mutuamente exclusivas. Movimentações de entrada podem existir sem vínculo com uma OS.
 
 ## Cadastros
 
@@ -48,7 +50,7 @@ erDiagram
 - Chaves estrangeiras impedem referências a clientes, veículos, serviços e materiais inexistentes. Exclusão de cadastros já usados em OS não pode apagar histórico; a política de inativação será aplicada na implementação.
 - O sistema valida transições de status e propriedade do veículo antes de persistir. Restrições de unicidade do banco protegem documento, placa e versão do orçamento contra concorrência.
 - A geração do orçamento grava uma versão com os valores então vigentes. Mudanças futuras no catálogo não recalculam propostas históricas.
-- O total é calculado a partir de `itens_orcamento`; o tempo médio usa `iniciada_em` e `finalizada_em` de OS finalizadas.
+- O total soma os subtotais de `itens_orcamento`, arredondados individualmente para centavos conforme as regras da OS; o tempo médio usa `iniciada_em` e `finalizada_em` de OS finalizadas ou entregues.
 - A baixa de estoque usa transação e bloqueio dos saldos envolvidos para impedir que atendimentos concorrentes consumam o mesmo material.
 
 Este modelo ainda é uma decisão de projeto, não uma alegação de que as migrations e regras já estejam implementadas.
