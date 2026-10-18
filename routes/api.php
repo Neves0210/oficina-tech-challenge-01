@@ -1,0 +1,20 @@
+<?php
+
+use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\ServiceController;
+use App\Http\Controllers\Api\TokenController;
+use App\Http\Controllers\Api\VehicleController;
+use Illuminate\Support\Facades\Route;
+
+Route::post('/auth/token', TokenController::class)->middleware('throttle:10,1');
+Route::get('/openapi', fn () => response()->json(json_decode(file_get_contents(base_path('docs/openapi.json')), true, flags: JSON_THROW_ON_ERROR)));
+
+Route::pattern('customer', '[0-9]+');
+Route::pattern('vehicle', '[0-9]+');
+Route::pattern('service', '[0-9]+');
+
+Route::middleware('jwt.admin')->group(function () {
+    Route::apiResource('customers', CustomerController::class);
+    Route::apiResource('vehicles', VehicleController::class);
+    Route::apiResource('services', ServiceController::class);
+});
