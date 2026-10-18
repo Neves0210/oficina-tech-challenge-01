@@ -1,0 +1,439 @@
+{
+  "info": {
+    "name": "Oficina — Cadastros da Fase 1",
+    "description": "Execute as requisições na ordem. Antes, crie um administrador pelo Artisan. Preencha admin_email e admin_password somente no ambiente local do Postman. Os dados dos cadastros são fictícios. A limpeza no final exclui apenas os registros criados nesta execução.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "customer_id",
+      "value": ""
+    },
+    {
+      "key": "vehicle_id",
+      "value": ""
+    },
+    {
+      "key": "service_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Obter token administrativo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/auth/token",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{admin_email}}\",\n  \"password\": \"{{admin_password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "auth": {
+          "type": "noauth"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+              "if (pm.response.code === 200) { pm.collectionVariables.set(\"access_token\", pm.response.json().access_token); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Cadastrar cliente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/customers",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Marcos Silveira\",\n  \"document\": \"529.982.247-25\",\n  \"email\": \"cliente@example.test\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+              "if (pm.response.code === 201) { pm.collectionVariables.set(\"customer_id\", pm.response.json().data.id); }",
+              "pm.test(\"CPF normalizado\", function () { pm.expect(pm.response.json().data.document).to.eql(\"52998224725\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Consultar cliente",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/customers/{{customer_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Cadastrar veículo do cliente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/vehicles",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customer_id\": {{customer_id}},\n  \"plate\": \"BRA1A23\",\n  \"brand\": \"Honda\",\n  \"model\": \"Civic\",\n  \"year\": 2012\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+              "if (pm.response.code === 201) { pm.collectionVariables.set(\"vehicle_id\", pm.response.json().data.id); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Cadastrar serviço",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/services",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Troca de óleo e filtro\",\n  \"price_cents\": 6000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+              "if (pm.response.code === 201) { pm.collectionVariables.set(\"service_id\", pm.response.json().data.id); }"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Recusar CPF duplicado",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/customers",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Marcos Silveira\",\n  \"document\": \"529.982.247-25\",\n  \"email\": \"cliente@example.test\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 422\", function () { pm.response.to.have.status(422); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Impedir exclusão de cliente com veículo",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/customers/{{customer_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409\", function () { pm.response.to.have.status(409); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Editar cliente",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/customers/{{customer_id}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Marcos Silveira atualizado\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Listar serviços",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/services"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Limpeza — excluir veículo criado",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/vehicles/{{vehicle_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 204\", function () { pm.response.to.have.status(204); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. Limpeza — excluir serviço criado",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/services/{{service_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 204\", function () { pm.response.to.have.status(204); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12. Limpeza — excluir cliente criado",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/customers/{{customer_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 204\", function () { pm.response.to.have.status(204); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13. Confirmar exclusão do cliente",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{base_url}}/api/customers/{{customer_id}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
