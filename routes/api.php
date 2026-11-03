@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\BudgetController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\CustomerPortalController;
 use App\Http\Controllers\Api\ExecutionController;
+use App\Http\Controllers\Api\ExecutionTimeController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PartController;
 use App\Http\Controllers\Api\ServiceController;
@@ -23,6 +24,7 @@ Route::pattern('order', '[0-9]+');
 Route::pattern('budget', '[0-9]+');
 
 Route::middleware('jwt.admin')->group(function () {
+    Route::get('reports/service-execution-time', ExecutionTimeController::class);
     Route::apiResource('customers', CustomerController::class);
     Route::apiResource('vehicles', VehicleController::class);
     Route::apiResource('services', ServiceController::class);

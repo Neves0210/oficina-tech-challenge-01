@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Oficina — API da Fase 1",
-    "version": "0.7.0",
+    "version": "0.8.0",
     "description": "Cadastros administrativos e estoque. Preços em centavos inteiros e quantidades exatas com três casas decimais. JWT administrativo obrigatório. Abertura e diagnóstico de OS com preços históricos; orçamento e execução nas etapas seguintes."
   },
   "servers": [
@@ -5579,6 +5579,60 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/reports/service-execution-time": {
+      "get": {
+        "tags": [
+          "Indicadores"
+        ],
+        "summary": "Tempo médio entre início e finalização das OS finalizadas ou entregues",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Média em segundos; null se não há OS elegível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "data"
+                  ],
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "orders_count",
+                        "average_seconds"
+                      ],
+                      "properties": {
+                        "orders_count": {
+                          "type": "integer",
+                          "minimum": 0
+                        },
+                        "average_seconds": {
+                          "type": "number",
+                          "nullable": true,
+                          "minimum": 0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT administrativo ausente ou inválido"
+          },
+          "403": {
+            "description": "Conta sem permissão administrativa"
           }
         }
       }
