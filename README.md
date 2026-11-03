@@ -45,6 +45,7 @@ O GitHub Actions executa testes e cobertura em Linux com PHP 8.4/8.5 e Windows c
 - [Orçamentos versionados](docs/api-orcamentos.md)
 - [Acompanhamento e decisão do cliente](docs/api-cliente.md)
 - [Execução, finalização e entrega](docs/api-execucao.md)
+- [Tempo médio de execução](docs/api-indicadores.md)
 - [Especificação OpenAPI](docs/openapi.json), também disponível em `GET /api/openapi`
 
 - [Linguagem ubíqua](docs/ddd/linguagem-ubiqua.md)

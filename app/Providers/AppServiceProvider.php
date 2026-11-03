@@ -7,6 +7,7 @@ use App\Domain\Materials\MaterialRepository;
 use App\Domain\Orders\BudgetRepository;
 use App\Domain\Orders\CustomerAccessRepository;
 use App\Domain\Orders\ExecutionRepository;
+use App\Domain\Orders\ExecutionTimeRepository;
 use App\Domain\Orders\OrderRepository;
 use App\Domain\Services\ServiceRepository;
 use App\Domain\Vehicles\VehicleRepository;
@@ -14,6 +15,7 @@ use App\Infrastructure\Persistence\EloquentBudgetRepository;
 use App\Infrastructure\Persistence\EloquentCustomerAccessRepository;
 use App\Infrastructure\Persistence\EloquentCustomerRepository;
 use App\Infrastructure\Persistence\EloquentExecutionRepository;
+use App\Infrastructure\Persistence\EloquentExecutionTimeRepository;
 use App\Infrastructure\Persistence\EloquentMaterialRepository;
 use App\Infrastructure\Persistence\EloquentOrderRepository;
 use App\Infrastructure\Persistence\EloquentServiceRepository;
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(BudgetRepository::class, EloquentBudgetRepository::class);
         $this->app->bind(CustomerAccessRepository::class, EloquentCustomerAccessRepository::class);
         $this->app->bind(ExecutionRepository::class, EloquentExecutionRepository::class);
+        $this->app->bind(ExecutionTimeRepository::class, EloquentExecutionTimeRepository::class);
         $this->app->bind(VehicleRepository::class, EloquentVehicleRepository::class);
         $this->app->bind(ServiceRepository::class, EloquentServiceRepository::class);
     }
