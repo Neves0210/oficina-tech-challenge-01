@@ -1,0 +1,28 @@
+erDiagram
+ direction LR
+ customers ||--o{ vehicles : "possui"
+ customers {
+ bigint id PK
+ string document UK
+ string document_type
+ string name
+ }
+ vehicles {
+ bigint id PK
+ bigint customer_id FK
+ string plate UK
+ string brand
+ string model
+ int year
+ }
+ workshop_services {
+ bigint id PK
+ string name
+ int price_cents
+ }
+ users {
+ bigint id PK
+ string email UK
+ string password
+ bool is_admin
+ }

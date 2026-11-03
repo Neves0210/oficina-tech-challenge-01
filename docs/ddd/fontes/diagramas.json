@@ -1,0 +1,300 @@
+[
+  {
+    "id": "D01",
+    "title": "C4 C1 | Contexto da solução",
+    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "kind": "native",
+    "nodes": [
+      [
+        "admin",
+        "Administrador\nGerencia cadastros e indicadores",
+        80,
+        200,
+        600,
+        220,
+        "actor"
+      ],
+      [
+        "equipe",
+        "Atendente e mecânico\nRecebem, diagnosticam e executam",
+        80,
+        700,
+        600,
+        220,
+        "actor"
+      ],
+      [
+        "sistema",
+        "Sistema da oficina\nBackend monolítico\nCadastros existentes; OS e estoque implementados",
+        1160,
+        420,
+        900,
+        300,
+        "system"
+      ],
+      [
+        "cliente",
+        "Cliente\nAcompanha OS e decide orçamento\nAcesso por API implementado",
+        2500,
+        420,
+        650,
+        300,
+        "actor"
+      ]
+    ],
+    "edges": [
+      [
+        "admin",
+        "sistema",
+        "Administra por API"
+      ],
+      [
+        "equipe",
+        "sistema",
+        "Opera atendimento"
+      ],
+      [
+        "cliente",
+        "sistema",
+        "Consulta e decide"
+      ]
+    ],
+    "note": "O contexto de negócio inclui diferentes atores, mas o backend distingue administradores JWT e acesso do cliente restrito à OS. Perfis operacionais separados não foram implementados nem assumidos como requisito. Nenhum aplicativo ou frontend foi incluído na entrega."
+  },
+  {
+    "id": "D02",
+    "title": "C4 C2 | Contêineres e persistência",
+    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "kind": "native",
+    "nodes": [
+      [
+        "consumidor",
+        "Consumidor da API\nPostman, Insomnia ou outro cliente HTTP",
+        100,
+        400,
+        680,
+        280,
+        "actor"
+      ],
+      [
+        "api",
+        "Backend Laravel 13 / PHP 8.4.1+\nREST, validação, JWT e cadastros\nUm único processo de aplicação",
+        1200,
+        360,
+        920,
+        360,
+        "system"
+      ],
+      [
+        "db",
+        "Banco relacional\nMySQL: escolha documentada\nSQLite: execução de testes validada",
+        2550,
+        400,
+        680,
+        280,
+        "data"
+      ]
+    ],
+    "edges": [
+      [
+        "consumidor",
+        "api",
+        "HTTP / JSON"
+      ],
+      [
+        "api",
+        "db",
+        "Eloquent / PDO"
+      ]
+    ],
+    "note": "Dockerfile e Compose ainda não existem. O diagrama não afirma que MySQL ou um ambiente Docker foram executados nesta revisão. Não há microserviços, broker ou integração de mensageria de negócio implementados."
+  },
+  {
+    "id": "D03",
+    "title": "C4 C3 | Componentes implementados",
+    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "kind": "native",
+    "nodes": [
+      [
+        "http",
+        "Interface HTTP\nControllers e FormRequests\nCadastros, OS, orçamento e cliente",
+        100,
+        260,
+        750,
+        260,
+        "system"
+      ],
+      [
+        "app",
+        "Aplicação\nRegistries e casos de uso\nExecução, estoque e indicador",
+        1200,
+        260,
+        750,
+        260,
+        "system"
+      ],
+      [
+        "domain",
+        "Domínio\nDocumentNumber, Plate, Money\nQuantity e OrderStatus\nContratos de repositório",
+        2300,
+        260,
+        850,
+        260,
+        "system"
+      ],
+      [
+        "jwt",
+        "Segurança\nTokenController, AuthenticateAdmin\nAdminToken / firebase/php-jwt",
+        100,
+        1000,
+        850,
+        280,
+        "data"
+      ],
+      [
+        "infra",
+        "Infraestrutura\nRepositórios Eloquent e Models\nCadastros, OS, estoque e acesso",
+        1200,
+        1000,
+        850,
+        280,
+        "data"
+      ]
+    ],
+    "edges": [
+      [
+        "http",
+        "app",
+        "Invoca casos de cadastro"
+      ],
+      [
+        "http",
+        "domain",
+        "Valida objetos de valor"
+      ],
+      [
+        "app",
+        "domain",
+        "Usa regras e contratos"
+      ],
+      [
+        "infra",
+        "domain",
+        "Implementa contratos"
+      ],
+      [
+        "http",
+        "jwt",
+        "Rotas protegidas por middleware"
+      ]
+    ],
+    "note": "AppServiceProvider liga contratos às implementações. Aplicação e domínio não importam Eloquent. OS, orçamento, acompanhamento, execução e estoque possuem casos de uso e repositórios. A seta Infraestrutura -> Domínio expressa a dependência de implementação; não uma chamada do domínio ao banco."
+  },
+  {
+    "id": "D04",
+    "title": "Mapa de contextos e agregados",
+    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "kind": "native",
+    "nodes": [
+      [
+        "atendimento",
+        "Atendimento\nCliente e Veículo\nCadastros existentes",
+        100,
+        250,
+        900,
+        260,
+        "system"
+      ],
+      [
+        "os",
+        "Ordens de Serviço\nOS raiz; itens e orçamentos internos\nImplementado",
+        1250,
+        650,
+        950,
+        300,
+        "system"
+      ],
+      [
+        "catalogo",
+        "Catálogo\nServiço existente; Material implementado\nPreço e unidade",
+        2450,
+        250,
+        800,
+        280,
+        "system"
+      ],
+      [
+        "estoque",
+        "Estoque\nSaldo de Material; movimentações\nImplementado",
+        2450,
+        1100,
+        800,
+        280,
+        "system"
+      ]
+    ],
+    "edges": [
+      [
+        "os",
+        "atendimento",
+        "Referencia cliente e veículo por ID"
+      ],
+      [
+        "os",
+        "catalogo",
+        "Referencia itens e copia valores"
+      ],
+      [
+        "estoque",
+        "catalogo",
+        "Referencia material"
+      ],
+      [
+        "os",
+        "estoque",
+        "Aplicação coordena início e baixa em transação"
+      ]
+    ],
+    "note": "As setas mostram dependências de negócio, não comunicação entre serviços distribuídos. OS protege orçamento e itens; Estoque protege saldo. A aplicação coordena os dois agregados na mesma transação. Eventos são fatos conceituais; nenhuma fila é necessária nesta fase. Contextos são limites lógicos; saldo e catálogo compartilham a tabela materials."
+  },
+  {
+    "id": "D05",
+    "title": "Estados da Ordem de Serviço",
+    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "kind": "mermaid",
+    "source": "stateDiagram-v2\n direction LR\n state \"Recebida\" as recebida\n state \"Em diagnóstico\" as diagnostico\n state \"Aguardando aprovação\" as aguardando\n state \"Em execução\" as execucao\n state \"Finalizada\" as finalizada\n state \"Entregue\" as entregue\n [*] --> recebida: Abrir OS\n recebida --> diagnostico: Iniciar diagnóstico\n diagnostico --> aguardando: Apresentar orçamento\n aguardando --> diagnostico: Revisar proposta\n aguardando --> execucao: Aprovação e saldo\n execucao --> finalizada: Finalizar\n finalizada --> entregue: Entregar\n entregue --> [*]",
+    "note": "Aprovar ou rejeitar registra a decisão e mantém Aguardando aprovação. A rejeição bloqueia execução. Iniciar revisão retorna ao diagnóstico. Outras transições são recusadas. A passagem para Em execução inclui baixa atômica dos materiais."
+  },
+  {
+    "id": "D06",
+    "title": "DER | Cadastros implementados",
+    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "kind": "mermaid",
+    "source": "erDiagram\n direction LR\n customers ||--o{ vehicles : \"possui\"\n customers {\n bigint id PK\n string document UK\n string document_type\n string name\n }\n vehicles {\n bigint id PK\n bigint customer_id FK\n string plate UK\n string brand\n string model\n int year\n }\n workshop_services {\n bigint id PK\n string name\n int price_cents\n }\n users {\n bigint id PK\n string email UK\n string password\n bool is_admin\n }",
+    "note": "users autentica administradores; não há vínculo implementado entre users e customers. workshop_services é catálogo independente. Exclusão de cliente com veículo é restringida por FK. As tabelas do atendimento e estoque aparecem na vista D07."
+  },
+  {
+    "id": "D07",
+    "title": "DER | Atendimento, orçamento e estoque implementados",
+    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "kind": "mermaid",
+    "source": "erDiagram\n direction LR\n customers ||--o{ vehicles : \"possui\"\n customers ||--o{ service_orders : \"solicita\"\n vehicles ||--o{ service_orders : \"recebe\"\n service_orders ||--o{ service_order_items : \"contem\"\n workshop_services |o--o{ service_order_items : \"referencia\"\n materials |o--o{ service_order_items : \"referencia\"\n service_orders ||--o{ order_budgets : \"versiona\"\n order_budgets ||--o{ order_budget_items : \"fotografa\"\n service_orders ||--o{ order_status_history : \"registra\"\n materials ||--o{ stock_movements : \"movimenta\"\n service_orders |o--o{ stock_movements : \"justifica\"\n\n service_orders ||--o| order_customer_access : \"autoriza\"\n users |o--o{ order_customer_access : \"emite\"\n",
+    "note": "Nomes físicos usados nas migrations. Item referencia serviço OU material. Versões preservam valores. order_customer_access limita a credencial a uma OS. users registra o administrador responsável quando aplicável."
+  },
+  {
+    "id": "D08",
+    "title": "Sequência | Início de execução com sucesso",
+    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "kind": "mermaid",
+    "source": "sequenceDiagram\n participant Equipe\n participant API\n participant Aplicacao\n participant Dominio\n participant Banco\n Equipe->>API: Iniciar execução da OS\n API->>API: Validar JWT e entrada\n API->>Aplicacao: Iniciar execução\n Aplicacao->>Banco: Abrir transação\n Aplicacao->>Banco: Bloquear OS e saldos\n Banco-->>Aplicacao: Versão e saldos atuais\n Aplicacao->>Dominio: Validar aprovação, status e quantidades\n Dominio-->>Aplicacao: Execução permitida\n Aplicacao->>Banco: Gravar saídas, status e instante\n Aplicacao->>Banco: Confirmar transação\n Aplicacao-->>API: OS em execução\n API-->>Equipe: Sucesso",
+    "note": "Bloqueios e verificações protegem contra concorrência, decisão obsoleta e repetição de baixa. POST /api/service-orders/{order}/start-execution inicia o fluxo. Serviços sem materiais continuam sujeitos à aprovação, mas não exigem saída de estoque."
+  },
+  {
+    "id": "D09",
+    "title": "Sequência | Estoque insuficiente",
+    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "kind": "mermaid",
+    "source": "sequenceDiagram\n participant Equipe\n participant API\n participant Aplicacao\n participant Dominio\n participant Banco\n Equipe->>API: Iniciar execução da OS\n API->>Aplicacao: Solicitação autenticada\n Aplicacao->>Banco: Abrir transação e bloquear saldos\n Banco-->>Aplicacao: Saldo insuficiente em um item\n Aplicacao->>Dominio: Validar disponibilidade\n Dominio-->>Aplicacao: Início recusado\n Aplicacao->>Banco: Reverter transação\n Aplicacao-->>API: Falha de negócio\n API-->>Equipe: OS permanece aguardando aprovação",
+    "note": "A aprovação permanece registrada, mas não autoriza saldo negativo. Nenhuma saída nem mudança de status deve persistir. A mesma exigência de atomicidade vale para falha durante a gravação. O contrato HTTP de erro ainda usa HTTP 409 nas violações de negócio."
+  }
+]

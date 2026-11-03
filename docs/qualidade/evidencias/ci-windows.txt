@@ -1,0 +1,8 @@
+GitHub Actions run 41678660143 / job 126066053221
+PHP 8.5 / windows-latest / pasta oficina-avaliação
+137 passed (773 assertions); nenhuma regressão ignorada.
+real console input works from a windows path with accents: PASS
+Total de cobertura (Xdebug): 98.9%.
+Customers 23/23; Materials 17/17; Orders 22/22; Shared 10/10; Vehicles 4/4.
+Services: sem linhas executáveis.
+URL: https://github.com/Neves0210/oficina-tech-challenge-01/actions/runs/41678660143

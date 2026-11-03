@@ -2,7 +2,7 @@
 
 Repositório do MVP de backend da oficina mecânica para o Tech Challenge da FIAP.
 
-A implementação atual oferece APIs administrativas de clientes, veículos, serviços, peças e insumos, protegidas por JWT, com validação de CPF/CNPJ e placa. Peças e insumos têm saldo e histórico de entradas/saídas em transação. O atendimento inclui abertura e diagnóstico de OS, orçamento versionado, decisão do cliente e execução com baixa atômica de materiais até finalização e entrega. O cliente acompanha a própria OS por credencial específica.
+A implementação atual oferece APIs administrativas de clientes, veículos, serviços, peças e insumos, protegidas por JWT, com validação de CPF/CNPJ e placa. Peças e insumos têm saldo e histórico de entradas/saídas em transação. O atendimento inclui abertura e diagnóstico de OS, orçamento versionado, decisão do cliente e execução com baixa atômica de materiais até finalização e entrega. O cliente acompanha a própria OS por credencial específica. A API administrativa também informa o tempo médio das OS concluídas.
 
 Pré-requisitos: PHP 8.4.1 ou superior, Composer e as extensões indicadas por `composer check-platform-reqs`. O banco escolhido para a solução é MySQL; a execução rápida e os testes locais abaixo usam SQLite, que exige `pdo_sqlite`.
 
@@ -54,3 +54,19 @@ O checkout da CI usa a pasta `oficina-avaliação` para exercitar também a regr
 - [Arquitetura e justificativa do banco](docs/ddd/arquitetura-e-banco.md)
 
 Organização: `app/Http` contém a interface HTTP, `app/Application` os casos de uso de cadastro, `app/Domain` as regras e contratos, `app/Infrastructure` os adaptadores de persistência e JWT, `database/migrations` o esquema e `tests` as verificações unitárias e de integração.
+
+## Documentação e evidências
+
+- [Guia Windows sem Docker e demonstração Postman](docs/entrega/windows-sem-docker.md)
+- [Requisitos, implementação e pendências](docs/arquitetura/requisitos-e-rastreabilidade.md)
+- [Event Storming dos três fluxos](docs/ddd/event-storming.md) e [PDF](docs/ddd/event-storming.pdf)
+- [Diagramas, contextos, entidades e objetos de valor](docs/ddd/catalogo-de-diagramas.md) e [PDF](docs/ddd/diagramas.pdf)
+- [Situação do compartilhamento e FigJam histórico](docs/ddd/indice-quadro.md)
+- [Relatório de testes, cobertura e evidências permanentes](docs/qualidade/relatorio-final.md)
+- [Análise de vulnerabilidades consolidada](docs/seguranca/relatorio-final.md)
+- [Integração dos PRs e fechamento da entrega](docs/entrega/estado-e-proximos-passos.md)
+
+Docker/Compose e execução concorrente em MySQL ficam para a etapa Windows.
+Vídeo e PDF final serão preparados pelo integrante. Os PDFs de DDD são anexos
+de apoio. Enquanto os PRs estiverem abertos, revise a branch
+`docs/delivery-evidence`; a main ainda não reúne todas as funcionalidades.
