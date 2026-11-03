@@ -39,7 +39,7 @@ jobs:
         uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, dom, xml, pdo_sqlite, pdo_mysql, bcmath
+          extensions: mbstring, dom, xml, xmlwriter, fileinfo, pdo_sqlite, pdo_mysql, bcmath, zip
           coverage: xdebug
           tools: composer:v2
       - name: Validar dependencias
