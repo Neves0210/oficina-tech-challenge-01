@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Shared\BusinessRuleViolation;
 use App\Domain\Shared\RecordNotFound;
 use App\Http\Middleware\AuthenticateAdmin;
 use Illuminate\Database\QueryException;
@@ -20,6 +21,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(fn ($request) => $request->is('api/*') || $request->expectsJson());
         $exceptions->render(function (RecordNotFound $exception, $request) {
             return response()->json(['message' => 'Registro não encontrado.'], 404);
+        });
+        $exceptions->render(function (BusinessRuleViolation $exception, $request) {
+            return response()->json(['message' => $exception->getMessage()], 409);
         });
         $exceptions->render(function (QueryException $exception, $request) {
             if ($request->is('api/*') && ($exception->errorInfo[0] ?? null) === '23000') {
