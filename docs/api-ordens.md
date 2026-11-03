@@ -40,6 +40,6 @@ uma OS não podem ser excluídos. Unidade de material referenciado também não
 pode mudar. Abrir/diagnosticar a ordem não aprova reparo nem consome estoque.
 
 Orçamento e decisão do cliente são descritos em `api-orcamentos.md` e
-`api-cliente.md`. Execução e entrega pertencem à próxima etapa. Os seis status
-já são definidos no domínio. Falhas seguem 401/403, 404, 409 e 422 das APIs
+`api-cliente.md`. Execução e entrega estão em `api-execucao.md`. Os seis status
+são definidos no domínio. Falhas seguem 401/403, 404, 409 e 422 das APIs
 administrativas.
