@@ -3,7 +3,7 @@
 Referência: enunciado do Tech Challenge fornecido pelo integrante. Esta tabela
 registra a implementação e as pendências, sem transformar decisões do MVP em
 requisitos adicionais. Data: 03/11/2026; código da cadeia de PRs #4 a #11.
-As funcionalidades abaixo ainda dependem da integração dos PRs abertos na main.
+Os PRs #5 a #12 foram integrados na main. Código consolidado: `9a4853de2733f076d4940b390b907b0600f178ff`.
 
 | Requisito | Implementação ou evidência | Situação |
 |---|---|---|
@@ -26,8 +26,8 @@ As funcionalidades abaixo ainda dependem da integração dos PRs abertos na main
 | DDD: três Event Storming, atores, eventos, políticas, agregados e VO | docs/ddd/event-storming.md e PDF; catálogo de diagramas e fontes | Revisão atual publicada neste PR |
 | Diagramas e compartilhamento público sem permissão | Markdown/Mermaid e PDFs no GitHub público | Publicado na branch; FigJam histórico identificado |
 | Análise de vulnerabilidades no repositório | docs/seguranca/relatorio-final.md e audit JSON | Sem avisos conhecidos na consulta atual |
-| Repositório público e desenvolvimento por PR | Neves0210/oficina-tech-challenge-01 | Público; PRs abertos em cadeia |
-| Proteção da main | Configuração de regras no GitHub | Pendente; não ativada por este PR |
+| Repositório público e desenvolvimento por PR | Neves0210/oficina-tech-challenge-01 | Público; PRs #5 a #12 integrados |
+| Proteção da main | Configuração de regras no GitHub | Regra preparada; confirmação de identidade GitHub pendente |
 | Vídeo público YouTube, até 15 minutos | A produzir pelo integrante no Windows | Pendente |
 | PDF final com integrantes e links coerentes com a versão | A produzir pelo integrante após fechar a versão | Pendente |
 
