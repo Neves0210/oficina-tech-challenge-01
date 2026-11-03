@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Oficina — API da Fase 1",
-    "version": "0.6.0",
+    "version": "0.7.0",
     "description": "Cadastros administrativos e estoque. Preços em centavos inteiros e quantidades exatas com três casas decimais. JWT administrativo obrigatório. Abertura e diagnóstico de OS com preços históricos; orçamento e execução nas etapas seguintes."
   },
   "servers": [
@@ -454,6 +454,11 @@
           "updated_at": {
             "type": "string",
             "format": "date-time"
+          },
+          "service_order_id": {
+            "type": "integer",
+            "nullable": true,
+            "description": "OS que originou o consumo; null nas movimentações administrativas."
           }
         }
       },
@@ -5307,6 +5312,270 @@
                       "REJECTED"
                     ]
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/service-orders/{id}/start-execution": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "post": {
+        "tags": [
+          "Execução"
+        ],
+        "operationId": "orders_start_execution",
+        "summary": "Iniciar execução aprovada e consumir estoque",
+        "description": "Ação administrativa. Repetição ou transição inválida retorna 409. Início exige proposta vigente aprovada e todos os saldos; baixa e status são uma transação. Horários são definidos pelo servidor.",
+        "responses": {
+          "200": {
+            "description": "Iniciar execução aprovada e consumir estoque",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ServiceOrder"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado ou token inválido/expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Conta sem permissão administrativa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com outro registro.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Dados inválidos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/service-orders/{id}/finish": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "post": {
+        "tags": [
+          "Execução"
+        ],
+        "operationId": "orders_finish",
+        "summary": "Finalizar execução",
+        "description": "Ação administrativa. Repetição ou transição inválida retorna 409. Início exige proposta vigente aprovada e todos os saldos; baixa e status são uma transação. Horários são definidos pelo servidor.",
+        "responses": {
+          "200": {
+            "description": "Finalizar execução",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ServiceOrder"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado ou token inválido/expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Conta sem permissão administrativa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com outro registro.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Dados inválidos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/service-orders/{id}/deliver": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "post": {
+        "tags": [
+          "Execução"
+        ],
+        "operationId": "orders_deliver",
+        "summary": "Registrar entrega do veículo",
+        "description": "Ação administrativa. Repetição ou transição inválida retorna 409. Início exige proposta vigente aprovada e todos os saldos; baixa e status são uma transação. Horários são definidos pelo servidor.",
+        "responses": {
+          "200": {
+            "description": "Registrar entrega do veículo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ServiceOrder"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado ou token inválido/expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Conta sem permissão administrativa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com outro registro.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Dados inválidos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }

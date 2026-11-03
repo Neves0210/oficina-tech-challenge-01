@@ -2042,6 +2042,296 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Execução e entrega",
+      "item": [
+        {
+          "name": "Zerar saldo da demonstração",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}/stock-movements",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"direction\": \"OUT\", \"quantity\": \"1.5\", \"reason\": \"Demonstrar falta de estoque\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\",()=>pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Recusar início sem estoque",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/start-execution"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\",()=>pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Repor estoque",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}/stock-movements",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"direction\": \"IN\", \"quantity\": \"1\", \"reason\": \"Compra para a OS\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\",()=>pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Iniciar execução aprovada",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/start-execution"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Em execução\",()=>pm.expect(pm.response.json().data.status).to.eql(\"Em execução\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Recusar consumo repetido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/start-execution"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\",()=>pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Finalizar serviços",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/finish"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Finalizada\",()=>pm.expect(pm.response.json().data.status).to.eql(\"Finalizada\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Entregar veículo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/deliver"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Entregue\",()=>pm.expect(pm.response.json().data.status).to.eql(\"Entregue\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cliente acompanha entrega",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customer/service-orders/{{order_id}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Entrega visível\",()=>pm.expect(pm.response.json().data.status).to.eql(\"Entregue\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Conferir baixa ligada à OS",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}/stock-movements"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Baixa única\",()=>{const rows=pm.response.json().data.filter(x=>x.service_order_id===Number(pm.collectionVariables.get(\"order_id\")));pm.expect(rows.length).to.eql(1);pm.expect(rows[0].quantity).to.eql(\"0.500\");});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

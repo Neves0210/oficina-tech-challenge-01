@@ -17,11 +17,29 @@ trait WorkshopFixtures
 
     protected int $fixtureService;
 
+    protected string $fixtureCustomerToken;
+
     protected function authenticateWorkshop(): void
     {
         config(['jwt.secret' => str_repeat('s', 64)]);
         $this->workshopAdmin = User::factory()->create(['is_admin' => true]);
+        $this->useWorkshopAdmin();
+    }
+
+    protected function useWorkshopAdmin(): void
+    {
         $this->withToken(app(AdminToken::class)->issue($this->workshopAdmin->id));
+    }
+
+    protected function approveWorkshopBudget(int $order): int
+    {
+        $this->useWorkshopAdmin();
+        $budget = $this->presentWorkshopBudget($order);
+        $this->fixtureCustomerToken = $this->postJson("/api/service-orders/{$order}/customer-access")->assertCreated()->json('data.access_token');
+        $this->withToken($this->fixtureCustomerToken)->postJson("/api/customer/service-orders/{$order}/budgets/{$budget}/decision", ['decision' => 'APPROVED'])->assertOk();
+        $this->useWorkshopAdmin();
+
+        return $budget;
     }
 
     protected function createWorkshopOrder(bool $diagnose = true): int

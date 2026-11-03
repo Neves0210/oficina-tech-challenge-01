@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\BudgetController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\CustomerPortalController;
+use App\Http\Controllers\Api\ExecutionController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PartController;
 use App\Http\Controllers\Api\ServiceController;
@@ -36,6 +37,9 @@ Route::middleware('jwt.admin')->group(function () {
     Route::post('service-orders/{order}/revise-budget', [BudgetController::class, 'revise']);
     Route::post('service-orders/{order}/customer-access', [CustomerPortalController::class, 'issue'])->middleware('throttle:10,1');
     Route::delete('service-orders/{order}/customer-access', [CustomerPortalController::class, 'revoke']);
+    Route::post('service-orders/{order}/start-execution', [ExecutionController::class, 'start']);
+    Route::post('service-orders/{order}/finish', [ExecutionController::class, 'finish']);
+    Route::post('service-orders/{order}/deliver', [ExecutionController::class, 'deliver']);
     foreach (['parts' => PartController::class, 'supplies' => SupplyController::class] as $resource => $controller) {
         Route::apiResource($resource, $controller)->parameters([$resource => 'material']);
         Route::get($resource.'/{material}/stock-movements', [$controller, 'movements'])->name($resource.'.stock.index');
