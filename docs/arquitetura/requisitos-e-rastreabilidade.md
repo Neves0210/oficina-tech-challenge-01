@@ -27,7 +27,7 @@ Os PRs #5 a #12 foram integrados na main. Código consolidado: `9a4853de2733f076
 | Diagramas e compartilhamento público sem permissão | Markdown/Mermaid e PDFs no GitHub público | Publicado na branch; FigJam histórico identificado |
 | Análise de vulnerabilidades no repositório | docs/seguranca/relatorio-final.md e audit JSON | Sem avisos conhecidos na consulta atual |
 | Repositório público e desenvolvimento por PR | Neves0210/oficina-tech-challenge-01 | Público; PRs #5 a #12 integrados |
-| Proteção da main | Configuração de regras no GitHub | Regra preparada; confirmação de identidade GitHub pendente |
+| Proteção da main | Configuração de regras no GitHub | Ativa; PR e três verificações de CI obrigatórios, inclusive para administradores |
 | Vídeo público YouTube, até 15 minutos | A produzir pelo integrante no Windows | Pendente |
 | PDF final com integrantes e links coerentes com a versão | A produzir pelo integrante após fechar a versão | Pendente |
 

@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-03",
+  "repository": "Neves0210/oficina-tech-challenge-01",
+  "branch": "main",
+  "protected": true,
+  "verification_sources": [
+    "GitHub REST GET /repos/Neves0210/oficina-tech-challenge-01/branches/main",
+    "GitHub Settings > Branches > regra salva main (tela de edição)"
+  ],
+  "require_pull_request": true,
+  "required_status_checks": [
+    "PHP 8.4 / ubuntu-latest",
+    "PHP 8.5 / ubuntu-latest",
+    "PHP 8.5 / windows-latest"
+  ],
+  "required_checks_source": "GitHub Actions",
+  "strict_up_to_date": true,
+  "conversation_resolution": true,
+  "enforce_admins": true,
+  "allow_force_pushes": false,
+  "allow_deletions": false,
+  "required_approvals": 0
+}
