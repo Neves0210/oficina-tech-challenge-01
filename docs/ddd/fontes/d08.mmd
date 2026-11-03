@@ -1,0 +1,18 @@
+sequenceDiagram
+ participant Equipe
+ participant API
+ participant Aplicacao
+ participant Dominio
+ participant Banco
+ Equipe->>API: Iniciar execução da OS
+ API->>API: Validar JWT e entrada
+ API->>Aplicacao: Iniciar execução
+ Aplicacao->>Banco: Abrir transação
+ Aplicacao->>Banco: Bloquear OS e saldos
+ Banco-->>Aplicacao: Versão e saldos atuais
+ Aplicacao->>Dominio: Validar aprovação, status e quantidades
+ Dominio-->>Aplicacao: Execução permitida
+ Aplicacao->>Banco: Gravar saídas, status e instante
+ Aplicacao->>Banco: Confirmar transação
+ Aplicacao-->>API: OS em execução
+ API-->>Equipe: Sucesso

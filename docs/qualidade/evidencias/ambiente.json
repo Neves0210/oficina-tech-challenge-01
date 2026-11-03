@@ -1,0 +1,18 @@
+{
+  "data": "2026-11-03",
+  "base_codigo": "4f67f81954b6990a5506e3fece2501720115743a",
+  "php": "8.5.8",
+  "driver": "PCOV 1.0.12",
+  "banco": "SQLite em memória; SQLite dedicado no teste HTTP",
+  "tests_passed": 136,
+  "tests_skipped": 1,
+  "assertions": 770,
+  "covered_lines": 687,
+  "executable_lines": 696,
+  "percent": 98.71,
+  "limites": [
+    "Sem execução MySQL; sem Docker; concorrência MySQL pendente",
+    "CI Windows: 137 testes e 773 asserções, sem ignorados, cobertura Xdebug 98.9%",
+    "Resumo HTTP não inclui credenciais nem respostas do cliente"
+  ]
+}

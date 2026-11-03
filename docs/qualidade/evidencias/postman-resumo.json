@@ -1,0 +1,53 @@
+{
+  "data": "2026-11-03",
+  "base_codigo": "4f67f81954b6990a5506e3fece2501720115743a",
+  "ambiente": "PHP 8.5.8 / SQLite / HTTP local real",
+  "stats": {
+    "iterations": {
+      "total": 1,
+      "pending": 0,
+      "failed": 0
+    },
+    "items": {
+      "total": 69,
+      "pending": 0,
+      "failed": 0
+    },
+    "scripts": {
+      "total": 69,
+      "pending": 0,
+      "failed": 0
+    },
+    "prerequests": {
+      "total": 69,
+      "pending": 0,
+      "failed": 0
+    },
+    "requests": {
+      "total": 69,
+      "pending": 0,
+      "failed": 0
+    },
+    "tests": {
+      "total": 69,
+      "pending": 0,
+      "failed": 0
+    },
+    "assertions": {
+      "total": 93,
+      "pending": 0,
+      "failed": 0
+    },
+    "testScripts": {
+      "total": 69,
+      "pending": 0,
+      "failed": 0
+    },
+    "prerequestScripts": {
+      "total": 0,
+      "pending": 0,
+      "failed": 0
+    }
+  },
+  "failures": []
+}

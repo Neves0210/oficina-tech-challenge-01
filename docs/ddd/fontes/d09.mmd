@@ -1,0 +1,15 @@
+sequenceDiagram
+ participant Equipe
+ participant API
+ participant Aplicacao
+ participant Dominio
+ participant Banco
+ Equipe->>API: Iniciar execução da OS
+ API->>Aplicacao: Solicitação autenticada
+ Aplicacao->>Banco: Abrir transação e bloquear saldos
+ Banco-->>Aplicacao: Saldo insuficiente em um item
+ Aplicacao->>Dominio: Validar disponibilidade
+ Dominio-->>Aplicacao: Início recusado
+ Aplicacao->>Banco: Reverter transação
+ Aplicacao-->>API: Falha de negócio
+ API-->>Equipe: OS permanece aguardando aprovação

@@ -1,0 +1,17 @@
+erDiagram
+ direction LR
+ customers ||--o{ vehicles : "possui"
+ customers ||--o{ service_orders : "solicita"
+ vehicles ||--o{ service_orders : "recebe"
+ service_orders ||--o{ service_order_items : "contem"
+ workshop_services |o--o{ service_order_items : "referencia"
+ materials |o--o{ service_order_items : "referencia"
+ service_orders ||--o{ order_budgets : "versiona"
+ order_budgets ||--o{ order_budget_items : "fotografa"
+ service_orders ||--o{ order_status_history : "registra"
+ materials ||--o{ stock_movements : "movimenta"
+ service_orders |o--o{ stock_movements : "justifica"
+
+ service_orders ||--o| order_customer_access : "autoriza"
+ users |o--o{ order_customer_access : "emite"
+

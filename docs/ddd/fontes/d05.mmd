@@ -1,0 +1,16 @@
+stateDiagram-v2
+ direction LR
+ state "Recebida" as recebida
+ state "Em diagnóstico" as diagnostico
+ state "Aguardando aprovação" as aguardando
+ state "Em execução" as execucao
+ state "Finalizada" as finalizada
+ state "Entregue" as entregue
+ [*] --> recebida: Abrir OS
+ recebida --> diagnostico: Iniciar diagnóstico
+ diagnostico --> aguardando: Apresentar orçamento
+ aguardando --> diagnostico: Revisar proposta
+ aguardando --> execucao: Aprovação e saldo
+ execucao --> finalizada: Finalizar
+ finalizada --> entregue: Entregar
+ entregue --> [*]

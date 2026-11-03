@@ -1,8 +1,8 @@
 # Regras da ordem de serviço
 
-Este documento fixa as decisões de domínio da Fase 1. As regras deverão aparecer no código e nos testes dos próximos PRs. As seis etapas abaixo são as exigidas pelo enunciado; aprovação e rejeição são decisões do orçamento, não status adicionais da OS.
+Este documento fixa as decisões de domínio da Fase 1. As regras estão implementadas na cadeia de PRs #5 a #11. As seis etapas abaixo são as exigidas pelo enunciado; aprovação e rejeição são decisões do orçamento, não status adicionais da OS.
 
-O enunciado exige criação e acompanhamento da OS, orçamento automático, aprovação ou rejeição, controle de estoque e regras de transição. Ele não determina o momento da baixa, o tratamento de uma proposta rejeitada nem a fórmula do tempo médio. As políticas detalhadas abaixo são decisões deste MVP para implementar esses requisitos, sujeitas à revisão antes da implementação.
+O enunciado exige criação e acompanhamento da OS, orçamento automático, aprovação ou rejeição, controle de estoque e regras de transição. Ele não determina o momento da baixa, o tratamento de uma proposta rejeitada nem a fórmula do tempo médio. As políticas detalhadas abaixo são decisões deste MVP para implementar esses requisitos, documentadas e cobertas por testes.
 
 ## Abertura e diagnóstico
 
@@ -41,5 +41,5 @@ Qualquer outra transição é recusada. A decisão de aprovar ou rejeitar não a
 
 ## Consulta e indicador
 
-- O cliente pode consultar o andamento da própria OS por API, com acesso vinculado àquela ordem. CPF/CNPJ isolado não concede acesso a dados da OS. O mecanismo concreto desse acesso será definido junto da API de acompanhamento; as APIs administrativas usarão JWT, como exige o enunciado.
+- O cliente pode consultar o andamento da própria OS por API, com acesso vinculado àquela ordem. CPF/CNPJ isolado não concede acesso a dados da OS. Uma credencial aleatória com validade de 24h autoriza apenas a OS correspondente; só o hash é persistido, e o administrador pode rotacionar ou revogar o acesso. As APIs administrativas usam JWT.
 - O tempo médio de execução considera OS que chegaram a **Finalizada**, inclusive as já **Entregues**: média dos intervalos entre entrada em **Em execução** e entrada em **Finalizada**. OS ainda em execução não entram na média. Sem OS finalizada, o resultado será `null`, acompanhado de quantidade de OS igual a zero. O indicador mede o atendimento completo, sem dividir o tempo entre serviços da mesma OS.
