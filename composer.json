@@ -6,7 +6,7 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.3",
+        "php": "^8.4.1",
         "firebase/php-jwt": "^7.2",
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0"
@@ -45,6 +45,10 @@
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
+        ],
+        "test:coverage": [
+            "@php artisan config:clear --ansi",
+            "@php artisan test --coverage --min=80 --coverage-clover=build/coverage/clover.xml --coverage-html=build/coverage/html --log-junit=build/junit.xml"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

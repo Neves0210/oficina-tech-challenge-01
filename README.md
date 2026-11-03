@@ -4,7 +4,7 @@ Repositório do MVP de backend da oficina mecânica para o Tech Challenge da FIA
 
 A implementação atual oferece APIs administrativas de clientes, veículos e serviços, protegidas por JWT, com validação de CPF/CNPJ e placa. Os demais fluxos da oficina ainda não estão implementados.
 
-Pré-requisitos: PHP 8.3 ou superior, Composer e as extensões indicadas por `composer check-platform-reqs`. O banco escolhido para a solução é MySQL; a execução rápida e os testes locais abaixo usam SQLite, que exige `pdo_sqlite`.
+Pré-requisitos: PHP 8.4.1 ou superior, Composer e as extensões indicadas por `composer check-platform-reqs`. O banco escolhido para a solução é MySQL; a execução rápida e os testes locais abaixo usam SQLite, que exige `pdo_sqlite`.
 
 Para preparar uma cópia nova do repositório:
 
@@ -34,6 +34,10 @@ php artisan test
 ```
 
 Os testes padrão usam SQLite em memória e não alteram seu banco de desenvolvimento.
+
+Para medir a cobertura, habilite PCOV ou Xdebug em modo coverage e execute `composer test:coverage`. O comando exige pelo menos 80% de cobertura de linhas do código de `app/` e gera HTML, Clover e JUnit em `build/`. A medição considera apenas código implementado; módulos futuros não entram no denominador.
+
+O GitHub Actions executa testes e cobertura em Linux com PHP 8.4/8.5 e Windows com PHP 8.5, além de validar o Composer e auditar as dependências. Os relatórios ficam nos artefatos de cada execução por 14 dias. O fluxo não usa Docker nem credenciais do banco de desenvolvimento.
 
 - [Referência dos cadastros e autenticação](docs/api-cadastros.md)
 - [Especificação OpenAPI](docs/openapi.json), também disponível em `GET /api/openapi`

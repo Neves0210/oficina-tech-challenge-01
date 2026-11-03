@@ -1,0 +1,65 @@
+name: Qualidade e seguranca
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: PHP ${{ matrix.php }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            php: '8.4'
+          - os: ubuntu-latest
+            php: '8.5'
+          - os: windows-latest
+            php: '8.5'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, dom, xml, xmlwriter, fileinfo, pdo_sqlite, pdo_mysql, bcmath, zip
+          coverage: xdebug
+          tools: composer:v2
+      - name: Validar dependencias
+        run: composer validate --strict
+      - name: Instalar versoes fixadas
+        run: composer install --no-interaction --prefer-dist --no-progress
+      - name: Preparar ambiente de teste
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      - name: Testes e cobertura minima de 80%
+        run: composer test:coverage
+      - name: Auditar dependencias
+        if: ${{ !cancelled() }}
+        run: |
+          mkdir -p build
+          composer audit --locked --format=json > build/composer-audit.json
+      - name: Guardar evidencias
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: quality-${{ matrix.os }}-php-${{ matrix.php }}
+          path: build/
+          if-no-files-found: warn
+          retention-days: 14
