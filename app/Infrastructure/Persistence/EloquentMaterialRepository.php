@@ -28,8 +28,8 @@ class EloquentMaterialRepository implements MaterialRepository
         return DB::transaction(function () use ($type, $data, $id) {
             $material = $id === null ? new Material : $this->record($type, $id, true);
             if ($id !== null && isset($data['unit']) && $material->unit !== $data['unit']
-                && StockMovement::where('material_id', $id)->exists()) {
-                throw new BusinessRuleViolation('A unidade não pode mudar após uma movimentação.');
+                && (StockMovement::where('material_id', $id)->exists() || ServiceOrderItem::where('material_id', $id)->exists())) {
+                throw new BusinessRuleViolation('A unidade não pode mudar após movimentação ou inclusão em OS.');
             }
             $material->fill($data);
             $material->type = $type->value;

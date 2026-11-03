@@ -2,8 +2,8 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Oficina — API da Fase 1",
-    "version": "0.3.0",
-    "description": "Cadastros administrativos e estoque. Preços em centavos inteiros e quantidades exatas com três casas decimais. JWT administrativo obrigatório."
+    "version": "0.4.0",
+    "description": "Cadastros administrativos e estoque. Preços em centavos inteiros e quantidades exatas com três casas decimais. JWT administrativo obrigatório. Abertura e diagnóstico de OS com preços históricos; orçamento e execução nas etapas seguintes."
   },
   "servers": [
     {
@@ -642,6 +642,225 @@
               }
             ],
             "description": "Positiva, até 999999999.999. Frações são strings com até três casas. Peças exigem inteiros."
+          }
+        }
+      },
+      "OrderItemInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "catalog_id",
+          "quantity"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "SERVICE",
+              "PART",
+              "SUPPLY"
+            ]
+          },
+          "catalog_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "quantity": {
+            "oneOf": [
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 999999999
+              },
+              {
+                "type": "string",
+                "pattern": "^(?:[1-9][0-9]{0,8}(?:\\.[0-9]{1,3})?|0\\.(?!0{1,3}$)[0-9]{1,3})$"
+              }
+            ],
+            "description": "Inteira para SERVICE/PART; até três casas para SUPPLY."
+          }
+        }
+      },
+      "OrderItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "SERVICE",
+              "PART",
+              "SUPPLY"
+            ]
+          },
+          "workshop_service_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "material_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "string"
+          },
+          "unit_price_cents": {
+            "type": "integer"
+          },
+          "subtotal_cents": {
+            "type": "integer",
+            "format": "int64",
+            "maximum": 9007199254740991
+          }
+        }
+      },
+      "OrderStatusHistory": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "from_status": {
+            "type": "string",
+            "nullable": true
+          },
+          "to_status": {
+            "type": "string",
+            "enum": [
+              "Recebida",
+              "Em diagnóstico",
+              "Aguardando aprovação",
+              "Em execução",
+              "Finalizada",
+              "Entregue"
+            ]
+          },
+          "user_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ServiceOrder": {
+        "type": "object",
+        "required": [
+          "id",
+          "customer_id",
+          "vehicle_id",
+          "status",
+          "complaint"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "customer_id": {
+            "type": "integer"
+          },
+          "vehicle_id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Recebida",
+              "Em diagnóstico",
+              "Aguardando aprovação",
+              "Em execução",
+              "Finalizada",
+              "Entregue"
+            ]
+          },
+          "complaint": {
+            "type": "string"
+          },
+          "diagnosis": {
+            "type": "string",
+            "nullable": true
+          },
+          "items_total_cents": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "items_count": {
+            "type": "integer"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItem"
+            }
+          },
+          "history": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderStatusHistory"
+            }
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "finished_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "delivered_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "OrderInput": {
+        "type": "object",
+        "required": [
+          "customer_document",
+          "vehicle_plate",
+          "complaint"
+        ],
+        "properties": {
+          "customer_document": {
+            "type": "string"
+          },
+          "vehicle_plate": {
+            "type": "string"
+          },
+          "complaint": {
+            "type": "string",
+            "maxLength": 10000
+          },
+          "items": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/components/schemas/OrderItemInput"
+            }
           }
         }
       }
@@ -3512,6 +3731,496 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/service-orders": {
+      "get": {
+        "tags": [
+          "Ordens de serviço"
+        ],
+        "operationId": "orders_list",
+        "summary": "Listar OS",
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ServiceOrder"
+                      }
+                    },
+                    "meta": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado ou token inválido/expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Conta sem permissão administrativa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com outro registro.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Dados inválidos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000,
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Ordens de serviço"
+        ],
+        "operationId": "orders_open",
+        "summary": "Abrir OS",
+        "responses": {
+          "201": {
+            "description": "Registro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ServiceOrder"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado ou token inválido/expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Conta sem permissão administrativa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com outro registro.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Dados inválidos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/service-orders/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "Ordens de serviço"
+        ],
+        "operationId": "orders_show",
+        "summary": "Detalhar OS e histórico",
+        "responses": {
+          "200": {
+            "description": "Registro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ServiceOrder"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado ou token inválido/expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Conta sem permissão administrativa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com outro registro.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Dados inválidos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/service-orders/{id}/diagnosis": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "post": {
+        "tags": [
+          "Ordens de serviço"
+        ],
+        "operationId": "orders_diagnose",
+        "summary": "Registrar diagnóstico e iniciar etapa",
+        "responses": {
+          "200": {
+            "description": "Registro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ServiceOrder"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado ou token inválido/expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Conta sem permissão administrativa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com outro registro.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Dados inválidos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "diagnosis"
+                ],
+                "properties": {
+                  "diagnosis": {
+                    "type": "string",
+                    "maxLength": 10000
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/service-orders/{id}/items": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ],
+      "put": {
+        "tags": [
+          "Ordens de serviço"
+        ],
+        "operationId": "orders_replace_items",
+        "summary": "Substituir itens antes do orçamento",
+        "responses": {
+          "200": {
+            "description": "Registro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/ServiceOrder"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autenticado ou token inválido/expirado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Conta sem permissão administrativa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Registro não encontrado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflito com outro registro.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Dados inválidos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "items"
+                ],
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "maxItems": 100,
+                    "items": {
+                      "$ref": "#/components/schemas/OrderItemInput"
+                    }
+                  }
                 }
               }
             }
