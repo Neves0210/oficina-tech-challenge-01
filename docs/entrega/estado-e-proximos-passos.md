@@ -19,12 +19,15 @@ A árvore consolidada do commit `9a4853de2733f076d4940b390b907b0600f178ff`
 
 ## Proteção da main
 
-A regra foi preparada para exigir PR, três verificações GitHub Actions (Linux
-PHP 8.4/8.5 e Windows PHP 8.5), branch atualizada e conversas resolvidas, sem
-force push nem exclusão e com aplicação aos administradores. O GitHub exigiu
-confirmação de identidade da conta ao salvar; a ativação depende dessa confirmação.
-Nenhuma senha ou código deve ser enviado no chat. A configuração ainda deve ser
-verificada como ativa nas configurações do repositório antes da entrega.
+Proteção confirmada em 03/11/2026 após a confirmação de identidade pelo
+proprietário. A regra exige PR, as três verificações GitHub Actions (Linux
+PHP 8.4/8.5 e Windows PHP 8.5), branch atualizada e conversas resolvidas.
+A regra vale também para administradores. Force push e exclusão estão bloqueados.
+Não exige aprovação de outra conta, permitindo trabalho individual via PR e CI.
+
+A API pública da branch informa `protected: true`; os critérios foram conferidos
+na tela de edição da regra salva. O conector não tem acesso ao endpoint detalhado
+de administração da proteção. [Registro da verificação](protecao-main.json).
 
 [Registro dos merges](integracao-prs.json).
 
