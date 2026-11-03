@@ -2332,6 +2332,30 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Indicadores",
+      "item": [
+        {
+          "name": "Tempo médio de execução",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/reports/service-execution-time"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Indicador disponível ao administrador\", () => { pm.response.to.have.status(200); const d = pm.response.json().data; pm.expect(d.orders_count).to.be.above(0); pm.expect(d.average_seconds).to.be.at.least(0); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
