@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "Oficina — Cadastros e estoque da Fase 1",
-    "description": "Execute as requisições na ordem. Antes, crie um administrador pelo Artisan. Preencha admin_email e admin_password somente no ambiente local do Postman. Os dados dos cadastros são fictícios. A limpeza no final exclui apenas os registros criados nesta execução. A pasta de materiais preserva o histórico e deixa os materiais criados inativos; execute em banco exclusivo de demonstração.",
+    "description": "Execute as requisições na ordem. Antes, crie um administrador pelo Artisan. Preencha admin_email e admin_password somente no ambiente local do Postman. Os dados dos cadastros são fictícios. A limpeza no final exclui apenas os registros criados nesta execução. A pasta de materiais preserva o histórico e deixa os materiais criados inativos; execute em banco exclusivo de demonstração. O fluxo de OS preserva cliente, veículo, serviço e ordem para consulta; use banco novo e exclusivo para repetir a demonstração.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -41,6 +41,22 @@
     },
     {
       "key": "supplies_id",
+      "value": ""
+    },
+    {
+      "key": "order_customer_id",
+      "value": ""
+    },
+    {
+      "key": "order_vehicle_id",
+      "value": ""
+    },
+    {
+      "key": "order_service_id",
+      "value": ""
+    },
+    {
+      "key": "order_id",
       "value": ""
     }
   ],
@@ -1117,6 +1133,296 @@
                 "exec": [
                   "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
                   "pm.test(\"Inativo\", () => pm.expect(pm.response.json().data.active).to.eql(false));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Abertura e diagnóstico de OS",
+      "item": [
+        {
+          "name": "Cadastrar cliente da OS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customers",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Empresa da demonstração OS\", \"document\": \"11222333000181\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"order_customer_id\",pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cadastrar veículo da OS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/vehicles",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"customer_id\": \"{{order_customer_id}}\", \"plate\": \"ZZZ9Z99\", \"brand\": \"Fiat\", \"model\": \"Uno\", \"year\": 2014}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"order_vehicle_id\",pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Cadastrar serviço da OS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/services",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Diagnóstico e troca\", \"price_cents\": 5000}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"order_service_id\",pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reativar insumo para OS",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"active\": true}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Abrir OS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"customer_document\": \"11.222.333/0001-81\", \"vehicle_plate\": \"ZZZ9Z99\", \"complaint\": \"Troca de óleo solicitada\", \"items\": [{\"kind\": \"SERVICE\", \"catalog_id\": \"{{order_service_id}}\", \"quantity\": \"1\"}, {\"kind\": \"SUPPLY\", \"catalog_id\": \"{{supplies_id}}\", \"quantity\": \"0.5\"}]}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"order_id\",pm.response.json().data.id);",
+                  "pm.test(\"Recebida\",()=>pm.expect(pm.response.json().data.status).to.eql(\"Recebida\"));",
+                  "pm.test(\"Total exato\",()=>pm.expect(pm.response.json().data.items_total_cents).to.eql(6250));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Iniciar diagnóstico",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/diagnosis",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"diagnosis\": \"Confirmada necessidade de troca\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Em diagnóstico\",()=>pm.expect(pm.response.json().data.status).to.eql(\"Em diagnóstico\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Consultar OS",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Listar OS",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
                 ]
               }
             }

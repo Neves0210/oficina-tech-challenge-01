@@ -17,7 +17,7 @@ O tipo é determinado pelo caminho. Um ID de insumo consultado em `/parts` retor
 
 O saldo inicial é zero. `stock_quantity` e `type` não podem ser alterados no
 cadastro. Preço não altera movimentações anteriores. A unidade não pode mudar
-depois da primeira movimentação; a resposta será 409. Material com histórico
+depois da primeira movimentação ou inclusão em OS; a resposta será 409. Material com histórico
 não pode ser excluído (409); pode ser inativado com `active: false`.
 
 ## Movimentações
