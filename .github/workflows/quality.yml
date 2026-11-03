@@ -31,10 +31,12 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: oficina-avaliação
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
+          path: oficina-avaliação
       - name: Configurar PHP
         uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
@@ -60,6 +62,6 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: quality-${{ matrix.os }}-php-${{ matrix.php }}
-          path: build/
+          path: oficina-avaliação/build/
           if-no-files-found: warn
           retention-days: 14
