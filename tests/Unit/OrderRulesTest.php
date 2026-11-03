@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Domain\Materials\Quantity;
+use App\Domain\Orders\BudgetDecision;
 use App\Domain\Orders\OrderStatus;
 use App\Domain\Shared\BusinessRuleViolation;
 use App\Domain\Shared\Money;
@@ -11,6 +12,12 @@ use PHPUnit\Framework\TestCase;
 
 class OrderRulesTest extends TestCase
 {
+    public function test_pending_is_not_a_customer_decision(): void
+    {
+        $this->expectException(BusinessRuleViolation::class);
+        BudgetDecision::PENDING->assertDecisionAllowed(BudgetDecision::PENDING);
+    }
+
     public function test_subtotals_round_each_item_half_up_with_exact_cents(): void
     {
         $one = (new Money(101))->times(new Quantity('0.5'));

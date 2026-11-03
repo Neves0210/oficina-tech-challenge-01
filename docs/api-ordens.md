@@ -39,7 +39,7 @@ Não há atualização genérica de status nem exclusão de OS. Cadastros ligado
 uma OS não podem ser excluídos. Unidade de material referenciado também não
 pode mudar. Abrir/diagnosticar a ordem não aprova reparo nem consome estoque.
 
-Orçamento versionado, decisão do cliente, execução e entrega serão adicionados
-nas etapas seguintes. Os seis status já são definidos no domínio, mas esta
-etapa expõe somente abertura e diagnóstico. Falhas seguem 401/403, 404, 409 e
-422 das APIs administrativas.
+Orçamento e decisão do cliente são descritos em `api-orcamentos.md` e
+`api-cliente.md`. Execução e entrega pertencem à próxima etapa. Os seis status
+já são definidos no domínio. Falhas seguem 401/403, 404, 409 e 422 das APIs
+administrativas.
