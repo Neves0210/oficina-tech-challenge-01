@@ -2,7 +2,7 @@
 
 Repositório do MVP de backend da oficina mecânica para o Tech Challenge da FIAP.
 
-A implementação atual oferece APIs administrativas de clientes, veículos, serviços, peças e insumos, protegidas por JWT, com validação de CPF/CNPJ e placa. Peças e insumos têm saldo e histórico de entradas/saídas em transação. É possível abrir, listar e detalhar OS, registrar diagnóstico e definir itens com preços históricos. Orçamento, aprovação, execução e acompanhamento pelo cliente pertencem às próximas etapas.
+A implementação atual oferece APIs administrativas de clientes, veículos, serviços, peças e insumos, protegidas por JWT, com validação de CPF/CNPJ e placa. Peças e insumos têm saldo e histórico de entradas/saídas em transação. É possível abrir, listar e detalhar OS, registrar diagnóstico, definir itens com preços históricos e apresentar orçamentos versionados. Aprovação, execução e acompanhamento pelo cliente pertencem às próximas etapas.
 
 Pré-requisitos: PHP 8.4.1 ou superior, Composer e as extensões indicadas por `composer check-platform-reqs`. O banco escolhido para a solução é MySQL; a execução rápida e os testes locais abaixo usam SQLite, que exige `pdo_sqlite`.
 
@@ -42,6 +42,7 @@ O GitHub Actions executa testes e cobertura em Linux com PHP 8.4/8.5 e Windows c
 - [Referência dos cadastros e autenticação](docs/api-cadastros.md)
 - [Peças, insumos e movimentações de estoque](docs/api-materiais.md)
 - [Abertura e diagnóstico de ordens de serviço](docs/api-ordens.md)
+- [Orçamentos versionados](docs/api-orcamentos.md)
 - [Especificação OpenAPI](docs/openapi.json), também disponível em `GET /api/openapi`
 
 - [Linguagem ubíqua](docs/ddd/linguagem-ubiqua.md)

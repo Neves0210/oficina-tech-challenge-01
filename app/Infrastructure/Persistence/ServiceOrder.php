@@ -22,4 +22,9 @@ class ServiceOrder extends Model
     {
         return $this->hasMany(OrderStatusHistory::class)->orderBy('id');
     }
+
+    public function budgets(): HasMany
+    {
+        return $this->hasMany(OrderBudget::class)->orderByDesc('version');
+    }
 }

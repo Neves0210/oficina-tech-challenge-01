@@ -113,7 +113,7 @@ class EloquentOrderRepository implements OrderRepository
 
     private function view(ServiceOrder $order): array
     {
-        $order->load(['items', 'history']);
+        $order->load(['items', 'history', 'budgets.items']);
         $data = $order->toArray();
         $total = new Money(0);
         foreach ($order->items as $item) {

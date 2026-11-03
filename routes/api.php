@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BudgetController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PartController;
@@ -17,6 +18,7 @@ Route::pattern('vehicle', '[0-9]+');
 Route::pattern('service', '[0-9]+');
 Route::pattern('material', '[0-9]+');
 Route::pattern('order', '[0-9]+');
+Route::pattern('budget', '[0-9]+');
 
 Route::middleware('jwt.admin')->group(function () {
     Route::apiResource('customers', CustomerController::class);
@@ -27,6 +29,10 @@ Route::middleware('jwt.admin')->group(function () {
     Route::get('service-orders/{order}', [OrderController::class, 'show']);
     Route::post('service-orders/{order}/diagnosis', [OrderController::class, 'diagnose']);
     Route::put('service-orders/{order}/items', [OrderController::class, 'replaceItems']);
+    Route::get('service-orders/{order}/budgets', [BudgetController::class, 'index']);
+    Route::post('service-orders/{order}/budgets', [BudgetController::class, 'store']);
+    Route::get('service-orders/{order}/budgets/{budget}', [BudgetController::class, 'show']);
+    Route::post('service-orders/{order}/revise-budget', [BudgetController::class, 'revise']);
     foreach (['parts' => PartController::class, 'supplies' => SupplyController::class] as $resource => $controller) {
         Route::apiResource($resource, $controller)->parameters([$resource => 'material']);
         Route::get($resource.'/{material}/stock-movements', [$controller, 'movements'])->name($resource.'.stock.index');
