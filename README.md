@@ -68,5 +68,5 @@ Organização: `app/Http` contém a interface HTTP, `app/Application` os casos d
 
 Docker/Compose e execução concorrente em MySQL ficam para a etapa Windows.
 Vídeo e PDF final serão preparados pelo integrante. Os PDFs de DDD são anexos
-de apoio. Enquanto os PRs estiverem abertos, revise a branch
-`docs/delivery-evidence`; a main ainda não reúne todas as funcionalidades.
+de apoio. Os PRs #5 a #12 estão integrados na `main`, que reúne o código e a documentação
+desta etapa. Use `main` para preparar o ambiente Windows.

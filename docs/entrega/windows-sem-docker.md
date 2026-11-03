@@ -7,11 +7,11 @@ Não é necessário Node.js para executar o backend.
 
 ## Obter a versão completa
 
-Enquanto os PRs estiverem abertos, a main ainda não contém todas as entregas.
-Para revisar a versão consolidada, em uma pasta nova no PowerShell:
+Os PRs #5 a #12 foram integrados na main. Para obter a versão consolidada,
+em uma pasta nova no PowerShell:
 
 ```powershell
-git clone --branch docs/delivery-evidence https://github.com/Neves0210/oficina-tech-challenge-01.git oficina-tech-challenge
+git clone --branch main https://github.com/Neves0210/oficina-tech-challenge-01.git oficina-tech-challenge
 Set-Location oficina-tech-challenge
 php --version
 composer install
@@ -28,7 +28,7 @@ php artisan serve --host=127.0.0.1 --port=8000
 A cópia nova evita sobrescrever um .env já configurado. A conta administrativa
 é criada com nome, e-mail e senha digitados pelo integrante; não há senha padrão.
 Não é preciso publicar uma API na internet para cumprir a execução local.
-Após os merges, o clone deve usar main ou a versão fixada para a avaliação.
+Antes da entrega, fixe o commit usado na avaliação e no vídeo.
 
 ## Postman
 

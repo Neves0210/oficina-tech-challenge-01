@@ -1,0 +1,79 @@
+{
+  "date": "2026-11-03",
+  "repository": "Neves0210/oficina-tech-challenge-01",
+  "integrated_commit": "9a4853de2733f076d4940b390b907b0600f178ff",
+  "pull_requests": [
+    {
+      "number": 5,
+      "url": "https://github.com/Neves0210/oficina-tech-challenge-01/pull/5",
+      "head_sha": "5cae77f7eaf391e8714a0eda4a0a59e340649061",
+      "merge_commit_sha": "39e9bd02a02badfe84c3e6e0ee245dde0041ed4f",
+      "merged_at": "2026-11-03T19:13:19Z",
+      "merged_by": "Neves0210",
+      "base": "main"
+    },
+    {
+      "number": 6,
+      "url": "https://github.com/Neves0210/oficina-tech-challenge-01/pull/6",
+      "head_sha": "1c74aa447cd72ae7ff117f98d7f098717a77c2f9",
+      "merge_commit_sha": "20656cba277e95cd33d92cc77fd0ed05536f2885",
+      "merged_at": "2026-11-03T19:14:16Z",
+      "merged_by": "Neves0210",
+      "base": "main"
+    },
+    {
+      "number": 7,
+      "url": "https://github.com/Neves0210/oficina-tech-challenge-01/pull/7",
+      "head_sha": "d11e5f5d6ee1603b7c77628c5af962b136aba446",
+      "merge_commit_sha": "fa4d13a05106dd6298a177bd8db037ddfc46c441",
+      "merged_at": "2026-11-03T19:14:32Z",
+      "merged_by": "Neves0210",
+      "base": "main"
+    },
+    {
+      "number": 8,
+      "url": "https://github.com/Neves0210/oficina-tech-challenge-01/pull/8",
+      "head_sha": "5596bfcc5c07224b83fd67ca04c10d8a33b4fdd6",
+      "merge_commit_sha": "a0e6ebce268ac709c0cbe532541599eba2999701",
+      "merged_at": "2026-11-03T19:14:45Z",
+      "merged_by": "Neves0210",
+      "base": "main"
+    },
+    {
+      "number": 9,
+      "url": "https://github.com/Neves0210/oficina-tech-challenge-01/pull/9",
+      "head_sha": "4c45b694b14f2c4bf86cb3f331d9535f4bc7d682",
+      "merge_commit_sha": "7f258bfb060068c49aaec9ab1d6d13824b8340a4",
+      "merged_at": "2026-11-03T19:15:27Z",
+      "merged_by": "Neves0210",
+      "base": "main"
+    },
+    {
+      "number": 10,
+      "url": "https://github.com/Neves0210/oficina-tech-challenge-01/pull/10",
+      "head_sha": "627a3f88bf819427c19b351a4d099d66d463892e",
+      "merge_commit_sha": "026655cce7efdf946c71316b298b2c44f77fac44",
+      "merged_at": "2026-11-03T19:15:41Z",
+      "merged_by": "Neves0210",
+      "base": "main"
+    },
+    {
+      "number": 11,
+      "url": "https://github.com/Neves0210/oficina-tech-challenge-01/pull/11",
+      "head_sha": "4f67f81954b6990a5506e3fece2501720115743a",
+      "merge_commit_sha": "bdf3d5b4c7b6ec54c616eec25808928df5c37caf",
+      "merged_at": "2026-11-03T19:15:59Z",
+      "merged_by": "Neves0210",
+      "base": "main"
+    },
+    {
+      "number": 12,
+      "url": "https://github.com/Neves0210/oficina-tech-challenge-01/pull/12",
+      "head_sha": "78b91364af5eef968f58415893c4df9922e6aa95",
+      "merge_commit_sha": "9a4853de2733f076d4940b390b907b0600f178ff",
+      "merged_at": "2026-11-03T19:16:12Z",
+      "merged_by": "Neves0210",
+      "base": "main"
+    }
+  ]
+}
