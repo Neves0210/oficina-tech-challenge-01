@@ -35,9 +35,9 @@ php artisan test
 
 Os testes padrão usam SQLite em memória e não alteram seu banco de desenvolvimento.
 
-Para medir a cobertura, habilite PCOV ou Xdebug em modo coverage e execute `composer test:coverage`. O comando exige pelo menos 80% de cobertura de linhas do código de `app/` e gera HTML, Clover e JUnit em `build/`. A medição considera apenas código implementado; módulos futuros não entram no denominador.
+Para medir a cobertura, habilite PCOV ou Xdebug em modo coverage e execute `composer test:coverage`. O comando exige pelo menos 80% de cobertura de linhas do código de `app/` e de cada domínio com linhas executáveis em `app/Domain/`, e gera HTML, Clover e JUnit em `build/`. A medição considera apenas código implementado; módulos futuros não entram no denominador.
 
-O GitHub Actions executa testes e cobertura em Linux com PHP 8.4/8.5 e Windows com PHP 8.5, além de validar o Composer e auditar as dependências. Os relatórios ficam nos artefatos de cada execução por 14 dias. O fluxo não usa Docker nem credenciais do banco de desenvolvimento.
+O checkout da CI usa a pasta `oficina-avaliação` para exercitar também a regressão de caminho com acentos no Windows. O GitHub Actions executa testes e cobertura em Linux com PHP 8.4/8.5 e Windows com PHP 8.5, além de validar o Composer e auditar as dependências. Os relatórios ficam nos artefatos de cada execução por 14 dias. O fluxo não usa Docker nem credenciais do banco de desenvolvimento.
 
 - [Referência dos cadastros e autenticação](docs/api-cadastros.md)
 - [Peças, insumos e movimentações de estoque](docs/api-materiais.md)
