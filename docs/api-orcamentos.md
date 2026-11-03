@@ -16,6 +16,5 @@ Versão e status são gravados com os snapshots numa única transação, sob blo
 da OS. Repetir a apresentação enquanto aguardando aprovação retorna 409 e não
 duplica proposta. A revisão também não é permitida depois de iniciar execução.
 
-Nesta etapa a consulta é administrativa. O acesso específico do cliente e o
-registro de aprovação/rejeição serão adicionados no próximo PR. Gerar orçamento
-não aprova reparo nem consome estoque.
+O cliente consulta e decide pela API específica descrita em `api-cliente.md`.
+Gerar orçamento não aprova reparo nem consome estoque.

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\BudgetController;
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\CustomerPortalController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PartController;
 use App\Http\Controllers\Api\ServiceController;
@@ -33,9 +34,17 @@ Route::middleware('jwt.admin')->group(function () {
     Route::post('service-orders/{order}/budgets', [BudgetController::class, 'store']);
     Route::get('service-orders/{order}/budgets/{budget}', [BudgetController::class, 'show']);
     Route::post('service-orders/{order}/revise-budget', [BudgetController::class, 'revise']);
+    Route::post('service-orders/{order}/customer-access', [CustomerPortalController::class, 'issue'])->middleware('throttle:10,1');
+    Route::delete('service-orders/{order}/customer-access', [CustomerPortalController::class, 'revoke']);
     foreach (['parts' => PartController::class, 'supplies' => SupplyController::class] as $resource => $controller) {
         Route::apiResource($resource, $controller)->parameters([$resource => 'material']);
         Route::get($resource.'/{material}/stock-movements', [$controller, 'movements'])->name($resource.'.stock.index');
         Route::post($resource.'/{material}/stock-movements', [$controller, 'move'])->name($resource.'.stock.store');
     }
+});
+
+Route::prefix('customer/service-orders/{order}')->middleware(['throttle:60,1', 'order.customer'])->group(function () {
+    Route::get('', [CustomerPortalController::class, 'show']);
+    Route::get('budgets/{budget}', [CustomerPortalController::class, 'budget']);
+    Route::post('budgets/{budget}/decision', [CustomerPortalController::class, 'decide']);
 });

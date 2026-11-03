@@ -1,8 +1,10 @@
 <?php
 
+use App\Domain\Orders\CustomerAccessDenied;
 use App\Domain\Shared\BusinessRuleViolation;
 use App\Domain\Shared\RecordNotFound;
 use App\Http\Middleware\AuthenticateAdmin;
+use App\Http\Middleware\AuthenticateOrderCustomer;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -15,7 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->alias(['jwt.admin' => AuthenticateAdmin::class]);
+        $middleware->alias(['jwt.admin' => AuthenticateAdmin::class, 'order.customer' => AuthenticateOrderCustomer::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(fn ($request) => $request->is('api/*') || $request->expectsJson());
@@ -24,6 +26,9 @@ return Application::configure(basePath: dirname(__DIR__))
         });
         $exceptions->render(function (BusinessRuleViolation $exception, $request) {
             return response()->json(['message' => $exception->getMessage()], 409);
+        });
+        $exceptions->render(function (CustomerAccessDenied $exception, $request) {
+            return response()->json(['message' => 'Acesso da OS inválido ou expirado.'], 401)->header('Cache-Control', 'no-store');
         });
         $exceptions->render(function (QueryException $exception, $request) {
             if ($request->is('api/*') && ($exception->errorInfo[0] ?? null) === '23000') {
