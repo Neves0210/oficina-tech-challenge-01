@@ -4,7 +4,7 @@ Data: 03/11/2026 (America/Sao_Paulo).
 
 ## Situação
 
-Implementada e validada em SQLite; concorrência MySQL pendente. Registro das decisões já descritas no projeto; não inventa aprovação coletiva.
+Implementada e validada em SQLite e MySQL; concorrência real comprovada na etapa Windows. Registro das decisões já descritas no projeto; não inventa aprovação coletiva.
 
 ## Contexto
 

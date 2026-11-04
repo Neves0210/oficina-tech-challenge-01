@@ -1,0 +1,14 @@
+{
+  "requests": {
+    "total": 69,
+    "pending": 0,
+    "failed": 0
+  },
+  "assertions": {
+    "total": 93,
+    "pending": 0,
+    "failed": 0
+  },
+  "failures": 0,
+  "environment": "HTTP / Nginx / PHP-FPM / MySQL 8.4"
+}

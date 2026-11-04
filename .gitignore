@@ -20,6 +20,8 @@
 /storage/pail
 /vendor
 /build
+/output
+/tmp
 Homestead.json
 Homestead.yaml
 Thumbs.db

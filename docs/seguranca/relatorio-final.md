@@ -1,5 +1,8 @@
 # Análise de vulnerabilidades - versão consolidada
 
+Atualização: [análise final Windows](fechamento-windows.md), com nova auditoria
+Composer, scan Semgrep e concorrência MySQL validada. O texto abaixo é o registro anterior.
+
 Consulta em 03/11/2026. Base de código `4f67f81954b6990a5506e3fece2501720115743a`.
 
 Comando: `composer audit --locked --format=json`. Código de saída: 0.
