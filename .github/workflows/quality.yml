@@ -32,6 +32,9 @@ jobs:
       - name: Cobertura global e por dominio
         run: |
           docker compose run --rm -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: tests composer test:coverage
+      - name: Diagnosticar falhas dos containers
+        if: failure()
+        run: docker compose logs --tail=100
       - name: Encerrar ambiente
         if: always()
         run: docker compose down
