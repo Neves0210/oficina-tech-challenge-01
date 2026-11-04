@@ -30,7 +30,8 @@ jobs:
       - name: Validar concorrencia real de estoque
         run: docker compose run --rm tests php scripts/verify-mysql-concurrency.php
       - name: Cobertura global e por dominio
-        run: docker compose run --rm -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: tests composer test:coverage
+        run: |
+          docker compose run --rm -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: tests composer test:coverage
       - name: Encerrar ambiente
         if: always()
         run: docker compose down
