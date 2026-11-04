@@ -61,8 +61,8 @@ mysql_output = (DEST / "mysql-testes.txt").read_text(encoding="utf-8-sig")
 (DEST / "mysql-testes.txt").write_text("\n".join(line.rstrip() for line in mysql_output.splitlines()).rstrip() + "\n", encoding="utf-8")
 shutil.make_archive(str(DEST / "cobertura-html"), "zip", ROOT / "build/coverage", "html")
 paths = []
-for folder in ["app", "routes", "database/migrations", "config", "scripts"]:
+for folder in ["app", "routes", "database/migrations", "config", "scripts", "docker"]:
     paths.extend(path for path in (ROOT / folder).rglob("*") if path.is_file() and "__pycache__" not in str(path))
-paths.extend(ROOT / name for name in ["composer.json", "composer.lock", "Dockerfile", "docker-compose.yml", "phpunit.xml"])
+paths.extend(ROOT / name for name in ["composer.json", "composer.lock", "Dockerfile", "docker-compose.yml", "phpunit.xml", ".dockerignore", ".env.example", ".github/workflows/quality.yml"])
 save("codigo.sha256.json", {str(path.relative_to(ROOT)).replace("\\", "/"): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(paths)})
 print("Resumos sem credenciais, cobertura e manifesto de codigo gravados.")
