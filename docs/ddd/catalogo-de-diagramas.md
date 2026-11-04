@@ -17,13 +17,13 @@ Relações: admin → sistema (Administra por API); equipe → sistema (Opera at
 
 ## D02 - C4 C2 | Contêineres e persistência
 
-Dockerfile e Compose ainda não existem. O diagrama não afirma que MySQL ou um ambiente Docker foram executados nesta revisão. Não há microserviços, broker ou integração de mensageria de negócio implementados.
+Dockerfile e Compose executam Nginx, PHP-FPM e MySQL. Migrations, fluxo HTTP e concorrência foram validados no Windows. Não há microserviços, broker ou mensageria de negócio implementados.
 
 | Componente | Conteúdo |
 |---|---|
 | consumidor | Consumidor da API; Postman, Insomnia ou outro cliente HTTP |
 | api | Backend Laravel 13 / PHP 8.4.1+; REST, validação, JWT e cadastros; Um único processo de aplicação |
-| db | Banco relacional; MySQL: escolha documentada; SQLite: execução de testes validada |
+| db | Banco relacional; MySQL: execução e concorrência validadas; SQLite: testes e cobertura |
 
 Relações: consumidor → api (HTTP / JSON); api → db (Eloquent / PDO).
 

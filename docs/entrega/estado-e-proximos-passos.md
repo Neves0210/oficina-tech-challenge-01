@@ -33,16 +33,16 @@ de administração da proteção. [Registro da verificação](protecao-main.json
 
 ## Pendências para fechar a Fase 1
 
-1. No Windows, preparar Dockerfile/Compose e a execução MySQL acordada. Validar
-   migrations, fluxo completo e duas execuções concorrentes disputando saldo:
-   apenas a operação com estoque suficiente deve persistir; nunca saldo negativo.
-2. Refazer testes/auditoria e atualizar as evidências após qualquer alteração.
-3. Conferir documentos e links públicos; os três fluxos e diagramas vigentes
-   estão no GitHub. FigJam mantém o retrato anterior, explicitamente histórico.
-4. Gravar o vídeo público no YouTube (até 15 minutos), mostrando a versão final
-   em execução e os cenários principais. Vídeo a cargo do integrante.
-5. Montar o PDF final com integrantes, identificadores pedidos, repositório,
-   documentação, vídeo e a mesma branch/commit demonstrada. PDF a cargo do integrante.
+1. Concluído: Dockerfile/Compose no repositório final, migrations e fluxo HTTP MySQL.
+2. Concluído: três rodadas concorrentes disputando saldo, com uma única baixa,
+   saldo zero e rollback da OS recusada. [Evidências](../qualidade/fechamento-windows.md).
+3. Concluído: suíte MySQL, cobertura 98,71%, auditoria Composer e scan Semgrep.
+4. Concluído: PDF acadêmico preenchível com Grupo 19, Gabriel De Barros Neves,
+   rm378693 e Discord Nev3s; roteiro de apresentação de 14m30s baseado no enunciado.
+5. Ação do integrante: gravar e publicar o vídeo público no YouTube (até 15 minutos),
+   inserir a URL real e conferir a branch/hash no PDF. [Como finalizar](finalizar-pdf.md).
+6. Publicar a atualização do vídeo por PR, regenerar o PDF com o hash publicado,
+   conferir os links sem login e enviar o PDF no canal da faculdade.
 
 Os PDFs em docs/ddd são material de apoio; não substituem o PDF final acadêmico.
 Não foi criado link de vídeo fictício, nem preenchida identificação desconhecida.

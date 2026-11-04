@@ -1,0 +1,13 @@
+{
+  "version": "1.182.1",
+  "config": "p/php",
+  "scope": [
+    "app",
+    "routes"
+  ],
+  "files_scanned": 84,
+  "findings": 0,
+  "errors": [],
+  "rules_run": 23,
+  "image": "semgrep/semgrep"
+}

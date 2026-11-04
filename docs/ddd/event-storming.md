@@ -72,7 +72,7 @@ Falha em qualquer item impede baixa parcial e início da execução. Tentativas 
 
 O enunciado exige controle de estoque, mas não fixa momento da baixa, unidades ou política de exclusão. Estes detalhes são decisões de projeto documentadas; não requisitos literais adicionais.
 
-Bloqueios implementados; concorrência real em MySQL ainda depende de validação no ambiente Windows posterior.
+Bloqueios validados em MySQL no Windows: três rodadas concorrentes, uma única baixa, saldo zero e rollback da OS recusada. Veja [evidências](../qualidade/fechamento-windows.md).
 
 ## Relação com o código
 
@@ -85,4 +85,4 @@ Bloqueios implementados; concorrência real em MySQL ainda depende de validaçã
 - Indicador: `ExecutionTimeReport`, `ExecutionTimeSummary`, `EloquentExecutionTimeRepository`.
 
 As implementações estão sob `app/`. Os testes ficam em `tests/Unit` e `tests/Feature`.
-A validação sequencial em SQLite não comprova a concorrência MySQL.
+A validação em MySQL é reproduzível por scripts/verify-mysql-concurrency.php e complementa a suíte SQLite.

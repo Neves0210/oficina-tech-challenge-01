@@ -14,6 +14,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  docker-mysql:
+    name: Docker / MySQL e concorrencia
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Construir ambiente completo
+        shell: pwsh
+        run: ./scripts/start-local.ps1
+      - name: Testes de integracao MySQL
+        run: docker compose run --rm tests
+      - name: Validar concorrencia real de estoque
+        run: docker compose run --rm tests php scripts/verify-mysql-concurrency.php
+      - name: Cobertura global e por dominio
+        run: |
+          docker compose run --rm -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: tests composer test:coverage
+      - name: Diagnosticar falhas dos containers
+        if: failure()
+        run: docker compose logs --tail=100
+      - name: Encerrar ambiente
+        if: always()
+        run: docker compose down
+
   tests:
     name: PHP ${{ matrix.php }} / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}

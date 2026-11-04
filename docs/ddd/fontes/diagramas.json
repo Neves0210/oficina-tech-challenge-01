@@ -2,7 +2,7 @@
   {
     "id": "D01",
     "title": "C4 C1 | Contexto da solução",
-    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "status": "Docker, MySQL e concorrência validados no Windows em 03/11/2026.",
     "kind": "native",
     "nodes": [
       [
@@ -64,7 +64,7 @@
   {
     "id": "D02",
     "title": "C4 C2 | Contêineres e persistência",
-    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "status": "Docker, MySQL e concorrência validados no Windows em 03/11/2026.",
     "kind": "native",
     "nodes": [
       [
@@ -78,7 +78,7 @@
       ],
       [
         "api",
-        "Backend Laravel 13 / PHP 8.4.1+\nREST, validação, JWT e cadastros\nUm único processo de aplicação",
+        "Backend Laravel 13 / PHP-FPM\nREST, validação e JWT\nMonólito em camadas",
         1200,
         360,
         920,
@@ -87,7 +87,7 @@
       ],
       [
         "db",
-        "Banco relacional\nMySQL: escolha documentada\nSQLite: execução de testes validada",
+        "Banco relacional\nMySQL: execução e concorrência validadas\nSQLite: testes e cobertura",
         2550,
         400,
         680,
@@ -107,12 +107,12 @@
         "Eloquent / PDO"
       ]
     ],
-    "note": "Dockerfile e Compose ainda não existem. O diagrama não afirma que MySQL ou um ambiente Docker foram executados nesta revisão. Não há microserviços, broker ou integração de mensageria de negócio implementados."
+    "note": "Dockerfile e Compose executam Nginx, PHP-FPM e MySQL; fluxo HTTP e concorrência validados. Sem microserviços ou broker."
   },
   {
     "id": "D03",
     "title": "C4 C3 | Componentes implementados",
-    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "status": "Docker, MySQL e concorrência validados no Windows em 03/11/2026.",
     "kind": "native",
     "nodes": [
       [
@@ -193,7 +193,7 @@
   {
     "id": "D04",
     "title": "Mapa de contextos e agregados",
-    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "status": "Docker, MySQL e concorrência validados no Windows em 03/11/2026.",
     "kind": "native",
     "nodes": [
       [
@@ -260,7 +260,7 @@
   {
     "id": "D05",
     "title": "Estados da Ordem de Serviço",
-    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "status": "Docker, MySQL e concorrência validados no Windows em 03/11/2026.",
     "kind": "mermaid",
     "source": "stateDiagram-v2\n direction LR\n state \"Recebida\" as recebida\n state \"Em diagnóstico\" as diagnostico\n state \"Aguardando aprovação\" as aguardando\n state \"Em execução\" as execucao\n state \"Finalizada\" as finalizada\n state \"Entregue\" as entregue\n [*] --> recebida: Abrir OS\n recebida --> diagnostico: Iniciar diagnóstico\n diagnostico --> aguardando: Apresentar orçamento\n aguardando --> diagnostico: Revisar proposta\n aguardando --> execucao: Aprovação e saldo\n execucao --> finalizada: Finalizar\n finalizada --> entregue: Entregar\n entregue --> [*]",
     "note": "Aprovar ou rejeitar registra a decisão e mantém Aguardando aprovação. A rejeição bloqueia execução. Iniciar revisão retorna ao diagnóstico. Outras transições são recusadas. A passagem para Em execução inclui baixa atômica dos materiais."
@@ -268,7 +268,7 @@
   {
     "id": "D06",
     "title": "DER | Cadastros implementados",
-    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "status": "Docker, MySQL e concorrência validados no Windows em 03/11/2026.",
     "kind": "mermaid",
     "source": "erDiagram\n direction LR\n customers ||--o{ vehicles : \"possui\"\n customers {\n bigint id PK\n string document UK\n string document_type\n string name\n }\n vehicles {\n bigint id PK\n bigint customer_id FK\n string plate UK\n string brand\n string model\n int year\n }\n workshop_services {\n bigint id PK\n string name\n int price_cents\n }\n users {\n bigint id PK\n string email UK\n string password\n bool is_admin\n }",
     "note": "users autentica administradores; não há vínculo implementado entre users e customers. workshop_services é catálogo independente. Exclusão de cliente com veículo é restringida por FK. As tabelas do atendimento e estoque aparecem na vista D07."
@@ -276,7 +276,7 @@
   {
     "id": "D07",
     "title": "DER | Atendimento, orçamento e estoque implementados",
-    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "status": "Docker, MySQL e concorrência validados no Windows em 03/11/2026.",
     "kind": "mermaid",
     "source": "erDiagram\n direction LR\n customers ||--o{ vehicles : \"possui\"\n customers ||--o{ service_orders : \"solicita\"\n vehicles ||--o{ service_orders : \"recebe\"\n service_orders ||--o{ service_order_items : \"contem\"\n workshop_services |o--o{ service_order_items : \"referencia\"\n materials |o--o{ service_order_items : \"referencia\"\n service_orders ||--o{ order_budgets : \"versiona\"\n order_budgets ||--o{ order_budget_items : \"fotografa\"\n service_orders ||--o{ order_status_history : \"registra\"\n materials ||--o{ stock_movements : \"movimenta\"\n service_orders |o--o{ stock_movements : \"justifica\"\n\n service_orders ||--o| order_customer_access : \"autoriza\"\n users |o--o{ order_customer_access : \"emite\"\n",
     "note": "Nomes físicos usados nas migrations. Item referencia serviço OU material. Versões preservam valores. order_customer_access limita a credencial a uma OS. users registra o administrador responsável quando aplicável."
@@ -284,7 +284,7 @@
   {
     "id": "D08",
     "title": "Sequência | Início de execução com sucesso",
-    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "status": "Docker, MySQL e concorrência validados no Windows em 03/11/2026.",
     "kind": "mermaid",
     "source": "sequenceDiagram\n participant Equipe\n participant API\n participant Aplicacao\n participant Dominio\n participant Banco\n Equipe->>API: Iniciar execução da OS\n API->>API: Validar JWT e entrada\n API->>Aplicacao: Iniciar execução\n Aplicacao->>Banco: Abrir transação\n Aplicacao->>Banco: Bloquear OS e saldos\n Banco-->>Aplicacao: Versão e saldos atuais\n Aplicacao->>Dominio: Validar aprovação, status e quantidades\n Dominio-->>Aplicacao: Execução permitida\n Aplicacao->>Banco: Gravar saídas, status e instante\n Aplicacao->>Banco: Confirmar transação\n Aplicacao-->>API: OS em execução\n API-->>Equipe: Sucesso",
     "note": "Bloqueios e verificações protegem contra concorrência, decisão obsoleta e repetição de baixa. POST /api/service-orders/{order}/start-execution inicia o fluxo. Serviços sem materiais continuam sujeitos à aprovação, mas não exigem saída de estoque."
@@ -292,7 +292,7 @@
   {
     "id": "D09",
     "title": "Sequência | Estoque insuficiente",
-    "status": "Revisão da implementação: 4f67f81954b6; Docker e MySQL executável pendentes.",
+    "status": "Docker, MySQL e concorrência validados no Windows em 03/11/2026.",
     "kind": "mermaid",
     "source": "sequenceDiagram\n participant Equipe\n participant API\n participant Aplicacao\n participant Dominio\n participant Banco\n Equipe->>API: Iniciar execução da OS\n API->>Aplicacao: Solicitação autenticada\n Aplicacao->>Banco: Abrir transação e bloquear saldos\n Banco-->>Aplicacao: Saldo insuficiente em um item\n Aplicacao->>Dominio: Validar disponibilidade\n Dominio-->>Aplicacao: Início recusado\n Aplicacao->>Banco: Reverter transação\n Aplicacao-->>API: Falha de negócio\n API-->>Equipe: OS permanece aguardando aprovação",
     "note": "A aprovação permanece registrada, mas não autoriza saldo negativo. Nenhuma saída nem mudança de status deve persistir. A mesma exigência de atomicidade vale para falha durante a gravação. O contrato HTTP de erro ainda usa HTTP 409 nas violações de negócio."

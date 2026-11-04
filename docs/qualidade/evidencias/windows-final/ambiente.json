@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-03T22:32:18.511830-03:00",
+  "host": "Windows / Docker Desktop / containers Linux",
+  "php_container": "8.4.26",
+  "mysql": "8.4.11",
+  "coverage_driver": "PCOV 1.0.12",
+  "windows_native": {
+    "passed": 137,
+    "assertions": 773
+  },
+  "mysql_container": {
+    "passed": 136,
+    "skipped": 1,
+    "assertions": 770
+  },
+  "coverage": {
+    "covered": 687,
+    "lines": 696,
+    "domains": {
+      "Customers": {
+        "lines": 23,
+        "covered": 23
+      },
+      "Materials": {
+        "lines": 17,
+        "covered": 17
+      },
+      "Orders": {
+        "lines": 22,
+        "covered": 22
+      },
+      "Services": {
+        "lines": 0,
+        "covered": 0
+      },
+      "Shared": {
+        "lines": 10,
+        "covered": 10
+      },
+      "Vehicles": {
+        "lines": 4,
+        "covered": 4
+      }
+    }
+  }
+}

@@ -1,0 +1,268 @@
+ Container oficina-fase1-mysql-1 Running
+ Container oficina-fase1-mysql-1 Waiting
+ Container oficina-fase1-mysql-1 Healthy
+ Container oficina-fase1-tests-run-d8fe95658b08 Creating
+ Container oficina-fase1-tests-run-d8fe95658b08 Created
+
+   INFO  Configuration cache cleared successfully.
+
+
+   PASS  Tests\Unit\ExampleTest
+  ✓ that true is true
+
+   PASS  Tests\Unit\MaterialQuantityTest
+  ✓ quantity has an exact canonical representation with data set #0      0.01s
+  ✓ quantity has an exact canonical representation with data set #1
+  ✓ quantity has an exact canonical representation with data set #2
+  ✓ quantity has an exact canonical representation with data set #3
+  ✓ quantity has an exact canonical representation with data set #4
+  ✓ invalid or ambiguous quantities are rejected with data set #0
+  ✓ invalid or ambiguous quantities are rejected with data set #1
+  ✓ invalid or ambiguous quantities are rejected with data set #2
+  ✓ invalid or ambiguous quantities are rejected with data set #3
+  ✓ invalid or ambiguous quantities are rejected with data set #4
+  ✓ invalid or ambiguous quantities are rejected with data set #5
+  ✓ invalid or ambiguous quantities are rejected with data set #6
+  ✓ invalid or ambiguous quantities are rejected with data set #7
+  ✓ invalid or ambiguous quantities are rejected with data set #8
+  ✓ invalid or ambiguous quantities are rejected with data set #9
+  ✓ invalid or ambiguous quantities are rejected with data set #10
+  ✓ fractional addition and subtraction do not use floating point
+  ✓ negative balance is rejected
+  ✓ balance overflow is rejected
+  ✓ parts allow whole quantities and supplies allow fractions
+  ✓ movements cannot have zero quantity
+
+   PASS  Tests\Unit\OrderRulesTest
+  ✓ pending is not a customer decision                                   0.01s
+  ✓ subtotals round each item half up with exact cents
+  ✓ money limits reject overflow before losing precision with data set #0
+  ✓ money limits reject overflow before losing precision with data set #1
+  ✓ money limits reject overflow before losing precision with data set #2
+  ✓ money limits reject overflow before losing precision with data set #3
+  ✓ money limits reject overflow before losing precision with data set #4
+  ✓ exactly the documented transitions are allowed with data set #0
+  ✓ exactly the documented transitions are allowed with data set #1
+  ✓ exactly the documented transitions are allowed with data set #2
+  ✓ exactly the documented transitions are allowed with data set #3
+  ✓ exactly the documented transitions are allowed with data set #4
+  ✓ exactly the documented transitions are allowed with data set #5
+  ✓ exactly the documented transitions are allowed with data set #6
+  ✓ exactly the documented transitions are allowed with data set #7
+  ✓ exactly the documented transitions are allowed with data set #8
+  ✓ exactly the documented transitions are allowed with data set #9
+  ✓ exactly the documented transitions are allowed with data set #10
+  ✓ exactly the documented transitions are allowed with data set #11
+  ✓ exactly the documented transitions are allowed with data set #12
+  ✓ exactly the documented transitions are allowed with data set #13
+  ✓ exactly the documented transitions are allowed with data set #14
+  ✓ exactly the documented transitions are allowed with data set #15
+  ✓ exactly the documented transitions are allowed with data set #16
+  ✓ exactly the documented transitions are allowed with data set #17
+  ✓ exactly the documented transitions are allowed with data set #18
+  ✓ exactly the documented transitions are allowed with data set #19
+  ✓ exactly the documented transitions are allowed with data set #20
+  ✓ exactly the documented transitions are allowed with data set #21
+  ✓ exactly the documented transitions are allowed with data set #22
+  ✓ exactly the documented transitions are allowed with data set #23
+  ✓ exactly the documented transitions are allowed with data set #24
+  ✓ exactly the documented transitions are allowed with data set #25
+  ✓ exactly the documented transitions are allowed with data set #26
+  ✓ exactly the documented transitions are allowed with data set #27
+  ✓ exactly the documented transitions are allowed with data set #28
+  ✓ exactly the documented transitions are allowed with data set #29
+  ✓ exactly the documented transitions are allowed with data set #30
+  ✓ exactly the documented transitions are allowed with data set #31
+  ✓ exactly the documented transitions are allowed with data set #32
+  ✓ exactly the documented transitions are allowed with data set #33
+  ✓ exactly the documented transitions are allowed with data set #34
+  ✓ exactly the documented transitions are allowed with data set #35
+  ✓ an order awaiting approval is not editable
+
+   PASS  Tests\Unit\Orders\ExecutionTimeSummaryTest
+  ✓ empty summary and rounding                                           0.02s
+  ✓ reversed interval is rejected
+
+   PASS  Tests\Unit\RegistrationValuesTest
+  ✓ document is normalized and validated with data set #0                0.01s
+  ✓ document is normalized and validated with data set #1
+  ✓ document is normalized and validated with data set #2
+  ✓ invalid document is rejected with data set #0
+  ✓ invalid document is rejected with data set #1
+  ✓ invalid document is rejected with data set #2
+  ✓ invalid document is rejected with data set #3
+  ✓ invalid document is rejected with data set #4
+  ✓ invalid document is rejected with data set #5
+  ✓ invalid document is rejected with data set #6
+  ✓ invalid document is rejected with data set #7
+  ✓ plate formats with data set #0
+  ✓ plate formats with data set #1
+  ✓ invalid plate is rejected
+
+   WARN  Tests\Feature\AdministrationCommandsTest
+  ✓ admin is created with a hashed password                              0.19s
+  ✓ weak password does not create an admin                               0.01s
+  - real console input works from a windows path with accents → Regress… 0.01s
+  ✓ jwt key generation preserves an existing key                         0.02s
+
+   PASS  Tests\Feature\AuthenticationTest
+  ✓ admin can obtain a signed token                                      0.05s
+  ✓ wrong password and non admin have the same denial                    0.18s
+
+   PASS  Tests\Feature\BudgetApiTest
+  ✓ presented budget copies items and computes total on the server       0.26s
+  ✓ revision creates a new version without changing the old proposal     0.07s
+  ✓ diagnosis items and current status are required                      0.04s
+  ✓ snapshot failure rolls back budget status and history                0.04s
+  ✓ budget queries are scoped and administrative                         0.06s
+
+   PASS  Tests\Feature\CustomerPortalTest
+  ✓ customer credential is hashed and only exposes its own order         0.11s
+  ✓ rotation and revocation invalidate previous credentials              0.05s
+  ✓ expired missing and malformed tokens return the same denial          0.04s
+  ✓ approval is explicit immutable and does not start execution          0.06s
+  ✓ rejection and revision require a decision on the new version         0.07s
+  ✓ decisions validate scope input and credential type                   0.07s
+  ✓ decision rechecks credential inside the transaction                  0.04s
+
+   PASS  Tests\Feature\ExampleTest
+  ✓ the application returns a successful response                        0.02s
+
+   PASS  Tests\Feature\ExecutionTimeReportTest
+  ✓ empty report and authentication                                      0.06s
+  ✓ only valid completed orders count once and delivery wait is exclude… 0.10s
+
+   PASS  Tests\Feature\MaterialApiTest
+  ✓ material crud and initial balance with data set #0                   0.04s
+  ✓ material crud and initial balance with data set #1                   0.03s
+  ✓ type scopes all queries and mutations                                0.04s
+  ✓ material validation rejects direct stock and type changes            0.03s
+  ✓ balance and ledger keep exact fractional values and author           0.04s
+  ✓ part quantities are whole and zero or imprecise movements are rejec… 0.03s
+  ✓ insufficient stock and overflow do not create movements              0.03s
+  ✓ ledger failure rolls back the balance                                0.02s
+  ✓ unit and history cannot be rewritten after a movement                0.03s
+  ✓ administrative access pagination and missing records                 0.03s
+
+   PASS  Tests\Feature\OrderExecutionTest
+  ✓ approved order consumes once and follows all remaining statuses      0.12s
+  ✓ pending or rejected or obsolete approval cannot start execution      0.09s
+  ✓ all materials must have stock and duplicate lines are aggregated     0.08s
+  ✓ failure after stock writes rolls back consumption and status         0.06s
+  ✓ service only order does not need material stock                      0.06s
+  ✓ inconsistent timestamps and invalid actions are rejected             0.05s
+
+   PASS  Tests\Feature\RegistrationApiTest
+  ✓ customer crud and normalized document                                0.06s
+  ✓ cnpj and document update                                             0.02s
+  ✓ invalid and duplicate documents do not persist                       0.03s
+  ✓ customer update keeps uniqueness and required fields                 0.02s
+  ✓ vehicle crud plate and customer relationship                         0.07s
+  ✓ vehicle rejects duplicate plate bad data and unknown customer        0.04s
+  ✓ service crud keeps money in integer cents                            0.03s
+  ✓ invalid prices are rejected and zero is supported                    0.02s
+  ✓ pagination missing records and http error format                     0.04s
+  ✓ all administrative resources require authentication                  0.02s
+  ✓ expired forged malformed and wrong audience tokens are denied        0.02s
+  ✓ admin permission is checked again on every request                   0.01s
+
+   PASS  Tests\Feature\ServiceOrderApiTest
+  ✓ opening links customer vehicle and snapshots without consuming stoc… 0.06s
+  ✓ diagnosis changes status once and items can be replaced or cleared   0.05s
+  ✓ unknown customer vehicle and wrong owner do not create an order      0.04s
+  ✓ invalid items roll back opening and preserve previous items on repl… 0.05s
+  ✓ validation prohibits status changes fractional services and injecte… 0.05s
+  ✓ noneditable orders and unauthenticated requests are denied           0.05s
+
+  Tests:    1 skipped, 136 passed (770 assertions)
+  Duration: 3.61s
+
+  Application/Materials/MaterialRegistry .............................. 100.0%
+  Application/Orders/BudgetRegistry ................................... 100.0%
+  Application/Orders/CustomerPortal ................................... 100.0%
+  Application/Orders/ExecutionTimeReport .............................. 100.0%
+  Application/Orders/OrderExecution ................................... 100.0%
+  Application/Orders/OrderRegistry .................................... 100.0%
+  Application/Registration/CustomerRegistry ........................... 100.0%
+  Application/Registration/Registry ................................... 100.0%
+  Application/Registration/ServiceRegistry ............................ 100.0%
+  Application/Registration/VehicleRegistry ............................ 100.0%
+  Console/Commands/CreateAdmin .................................... 22 / 97.1%
+  Console/Commands/GenerateJwtSecret .............. 17..19, 30, 32..34 / 70.6%
+  Domain/Customers/CustomerRepository ................................. 100.0%
+  Domain/Customers/DocumentNumber ..................................... 100.0%
+  Domain/Materials/MaterialRepository ................................. 100.0%
+  Domain/Materials/MaterialType ....................................... 100.0%
+  Domain/Materials/MovementDirection .................................. 100.0%
+  Domain/Materials/Quantity ........................................... 100.0%
+  Domain/Orders/BudgetDecision ........................................ 100.0%
+  Domain/Orders/BudgetRepository ...................................... 100.0%
+  Domain/Orders/CustomerAccessDenied .................................. 100.0%
+  Domain/Orders/CustomerAccessRepository .............................. 100.0%
+  Domain/Orders/ExecutionRepository ................................... 100.0%
+  Domain/Orders/ExecutionTimeRepository ............................... 100.0%
+  Domain/Orders/ExecutionTimeSummary .................................. 100.0%
+  Domain/Orders/OrderRepository ....................................... 100.0%
+  Domain/Orders/OrderStatus ........................................... 100.0%
+  Domain/Services/ServiceRepository ................................... 100.0%
+  Domain/Shared/BusinessRuleViolation ................................. 100.0%
+  Domain/Shared/Money ................................................. 100.0%
+  Domain/Shared/RecordNotFound ........................................ 100.0%
+  Domain/Shared/RecordRepository ...................................... 100.0%
+  Domain/Vehicles/Plate ............................................... 100.0%
+  Domain/Vehicles/VehicleRepository ................................... 100.0%
+  Http/Controllers/Api/BudgetController ............................... 100.0%
+  Http/Controllers/Api/CustomerController ............................. 100.0%
+  Http/Controllers/Api/CustomerPortalController ....................... 100.0%
+  Http/Controllers/Api/ExecutionController ............................ 100.0%
+  Http/Controllers/Api/ExecutionTimeController ........................ 100.0%
+  Http/Controllers/Api/MaterialController ............................. 100.0%
+  Http/Controllers/Api/OrderController ................................ 100.0%
+  Http/Controllers/Api/PartController ................................. 100.0%
+  Http/Controllers/Api/ServiceController .............................. 100.0%
+  Http/Controllers/Api/SupplyController ............................... 100.0%
+  Http/Controllers/Api/TokenController ................................ 100.0%
+  Http/Controllers/Api/VehicleController .............................. 100.0%
+  Http/Controllers/Controller ......................................... 100.0%
+  Http/Middleware/AuthenticateAdmin ................................... 100.0%
+  Http/Middleware/AuthenticateOrderCustomer ........................... 100.0%
+  Http/Requests/CustomerRequest ....................................... 100.0%
+  Http/Requests/MaterialRequest ....................................... 100.0%
+  Http/Requests/OrderItemsRequest ..................................... 100.0%
+  Http/Requests/OrderRequest .......................................... 100.0%
+  Http/Requests/PaginationRequest ..................................... 100.0%
+  Http/Requests/ServiceRequest ........................................ 100.0%
+  Http/Requests/StockMovementRequest .................................. 100.0%
+  Http/Requests/VehicleRequest ........................................ 100.0%
+  Infrastructure/Persistence/Customer ................................... 0.0%
+  Infrastructure/Persistence/EloquentBudgetRepository ................. 100.0%
+  Infrastructure/Persistence/EloquentCustomerAccessRepository ......... 100.0%
+  Infrastructure/Persistence/EloquentCustomerRepository ............... 100.0%
+  Infrastructure/Persistence/EloquentExecutionRepository .............. 100.0%
+  Infrastructure/Persistence/EloquentExecutionTimeRepository .......... 100.0%
+  Infrastructure/Persistence/EloquentMaterialRepository ............... 100.0%
+  Infrastructure/Persistence/EloquentOrderRepository .................. 100.0%
+  Infrastructure/Persistence/EloquentRecordRepository ................. 100.0%
+  Infrastructure/Persistence/EloquentServiceRepository ................ 100.0%
+  Infrastructure/Persistence/EloquentVehicleRepository ................ 100.0%
+  Infrastructure/Persistence/Material ................................. 100.0%
+  Infrastructure/Persistence/OrderBudget .............................. 100.0%
+  Infrastructure/Persistence/OrderBudgetItem .......................... 100.0%
+  Infrastructure/Persistence/OrderCustomerAccess ...................... 100.0%
+  Infrastructure/Persistence/OrderStatusHistory ....................... 100.0%
+  Infrastructure/Persistence/ServiceOrder ............................. 100.0%
+  Infrastructure/Persistence/ServiceOrderItem ......................... 100.0%
+  Infrastructure/Persistence/StockMovement ............................ 100.0%
+  Infrastructure/Persistence/Vehicle .............................. 19 / 50.0%
+  Infrastructure/Persistence/WorkshopService .......................... 100.0%
+  Infrastructure/Security/AdminToken .............................. 46 / 95.7%
+  Models/User ......................................................... 100.0%
+  Providers/AppServiceProvider ........................................ 100.0%
+  ────────────────────────────────────────────────────────────────────────────
+                                                                 Total: 98.7 %
+Customers: 23/23 linhas (100.00%).
+Materials: 17/17 linhas (100.00%).
+Orders: 22/22 linhas (100.00%).
+Services: sem linhas executáveis (contratos).
+Shared: 10/10 linhas (100.00%).
+Vehicles: 4/4 linhas (100.00%).

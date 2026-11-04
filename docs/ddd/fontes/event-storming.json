@@ -196,7 +196,7 @@
         "Concorrência: duas OS não podem consumir o mesmo saldo. A aplicação coordena os contextos dentro de um único banco, com transação e bloqueio dos saldos.",
         "Falha em qualquer item impede baixa parcial e início da execução. Tentativas rejeitadas não são movimentações de saída bem-sucedidas.",
         "O enunciado exige controle de estoque, mas não fixa momento da baixa, unidades ou política de exclusão. Estes detalhes são decisões de projeto documentadas; não requisitos literais adicionais.",
-        "Bloqueios implementados; concorrência real em MySQL ainda depende de validação no ambiente Windows posterior."
+        "Concorrência MySQL validada: uma única baixa, saldo zero e rollback da OS recusada em três rodadas."
       ]
     }
   ],

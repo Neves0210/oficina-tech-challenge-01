@@ -1,5 +1,9 @@
 # Evidências consolidadas da implementação
 
+Atualização: a etapa Windows com Docker, MySQL e concorrência foi concluída.
+Consulte a [validação final](fechamento-windows.md) e suas evidências permanentes.
+Os resultados abaixo preservam o registro anterior à etapa Docker.
+
 Data: 03/11/2026. Código de referência: `4f67f81954b6990a5506e3fece2501720115743a`.
 A documentação posterior não altera os arquivos da aplicação.
 

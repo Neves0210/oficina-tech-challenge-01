@@ -6,6 +6,30 @@ A implementação atual oferece APIs administrativas de clientes, veículos, ser
 
 Pré-requisitos: PHP 8.4.1 ou superior, Composer e as extensões indicadas por `composer check-platform-reqs`. O banco escolhido para a solução é MySQL; a execução rápida e os testes locais abaixo usam SQLite, que exige `pdo_sqlite`.
 
+## Execução recomendada com Docker
+
+No Windows, com Docker Desktop aberto e containers Linux, não é necessário instalar PHP ou Composer. Na pasta deste repositório:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/start-local.ps1
+docker compose exec app php artisan app:create-admin
+```
+
+API: `http://127.0.0.1:8081/api`. OpenAPI: `http://127.0.0.1:8081/api/openapi`. Saúde: `http://127.0.0.1:8081/up`. O script gera somente chaves ausentes, preserva as existentes, constrói a imagem e aplica migrations. MySQL persiste em volume; a imagem inclui o código e as dependências. Após alterações, reconstrua a imagem.
+
+```powershell
+docker compose run --rm tests
+docker compose run --rm -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: tests composer test:coverage
+docker compose run --rm tests php scripts/verify-mysql-concurrency.php
+docker compose exec -T app composer audit --locked
+```
+
+O serviço de testes usa banco MySQL separado e cache em memória. [Guia Docker e Postman](docs/entrega/docker-windows.md). [Validação final Windows/MySQL](docs/qualidade/fechamento-windows.md). [Análise final de vulnerabilidades](docs/seguranca/fechamento-windows.md). [Vídeo da entrega](docs/entrega/video.md).
+
+Arquitetura: monólito em camadas, com HTTP, aplicação, domínio e infraestrutura. Tecnologias: PHP 8.4+, Laravel 13, JWT, MySQL 8.4, PHPUnit, PCOV, Nginx e Docker Compose. MySQL foi escolhido por integridade referencial, transações e bloqueios de linha para coordenar OS e estoque; veja o [ADR do banco](docs/arquitetura/adr/002-banco-relacional.md).
+
+## Alternativa local sem Docker
+
 Para preparar uma cópia nova do repositório:
 
 ```powershell
@@ -66,7 +90,8 @@ Organização: `app/Http` contém a interface HTTP, `app/Application` os casos d
 - [Análise de vulnerabilidades consolidada](docs/seguranca/relatorio-final.md)
 - [Integração dos PRs e fechamento da entrega](docs/entrega/estado-e-proximos-passos.md)
 
-Docker/Compose e execução concorrente em MySQL ficam para a etapa Windows.
-Vídeo e PDF final serão preparados pelo integrante. Os PDFs de DDD são anexos
-de apoio. Os PRs #5 a #12 estão integrados na `main`, que reúne o código e a documentação
-desta etapa. Use `main` para preparar o ambiente Windows.
+Docker/Compose, execução MySQL, fluxo HTTP e concorrência foram validados no Windows.
+Os PDFs de DDD são anexos de apoio. O PDF acadêmico com campos editáveis e o roteiro
+de 14m30s são gerados por `scripts/build-delivery-pdfs.py`; o procedimento para
+inserir o link real do vídeo está em [finalização da entrega](docs/entrega/finalizar-pdf.md).
+O vídeo ainda deve ser gravado e publicado pelo integrante.

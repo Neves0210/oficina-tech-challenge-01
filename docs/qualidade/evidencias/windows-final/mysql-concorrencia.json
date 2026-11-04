@@ -1,0 +1,43 @@
+{
+    "database": "MySQL",
+    "version": "8.4.11",
+    "rounds": [
+        {
+            "round": 1,
+            "independent_connections": true,
+            "overlapping_executions": true,
+            "outcomes": [
+                "insufficient_stock",
+                "started"
+            ],
+            "final_stock": "0.000",
+            "out_movements": 1,
+            "loser_rolled_back": true
+        },
+        {
+            "round": 2,
+            "independent_connections": true,
+            "overlapping_executions": true,
+            "outcomes": [
+                "insufficient_stock",
+                "started"
+            ],
+            "final_stock": "0.000",
+            "out_movements": 1,
+            "loser_rolled_back": true
+        },
+        {
+            "round": 3,
+            "independent_connections": true,
+            "overlapping_executions": true,
+            "outcomes": [
+                "insufficient_stock",
+                "started"
+            ],
+            "final_stock": "0.000",
+            "out_movements": 1,
+            "loser_rolled_back": true
+        }
+    ],
+    "passed": true
+}

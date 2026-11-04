@@ -11,9 +11,12 @@ from xml.sax.saxutils import escape
 
 BASE=Path(__file__).resolve().parent.parent
 TMP=BASE/'fontes'
-C=json.loads((TMP/'event-storming.json').read_text()); DS=json.loads((TMP/'diagramas.json').read_text())
-pdfmetrics.registerFont(TTFont('Body',os.environ.get('PDF_FONT_REGULAR', '/System/Library/Fonts/Supplemental/Arial.ttf')))
-pdfmetrics.registerFont(TTFont('Strong',os.environ.get('PDF_FONT_BOLD', '/System/Library/Fonts/Supplemental/Arial Bold.ttf')))
+C=json.loads((TMP/'event-storming.json').read_text(encoding='utf-8')); DS=json.loads((TMP/'diagramas.json').read_text(encoding='utf-8'))
+def font_path(variable, candidates):
+    if os.environ.get(variable): return os.environ[variable]
+    return str(next(Path(path) for path in candidates if Path(path).exists()))
+pdfmetrics.registerFont(TTFont('Body',font_path('PDF_FONT_REGULAR', ['C:/Windows/Fonts/arial.ttf', '/System/Library/Fonts/Supplemental/Arial.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'])))
+pdfmetrics.registerFont(TTFont('Strong',font_path('PDF_FONT_BOLD', ['C:/Windows/Fonts/arialbd.ttf', '/System/Library/Fonts/Supplemental/Arial Bold.ttf', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'])))
 W,H=landscape(A3); INK=HexColor('#173149'); MUTED=HexColor('#536779'); LIGHT=HexColor('#F3F6FA')
 COLORS=['#FFE299','#A8DAFF','#FFD3A8','#D3BDFF','#B3EFBD']
 def p(c,s,x,y,w,size=11,bold=False,color=INK,leading=None):
@@ -52,7 +55,7 @@ def header(c,k,title,status):
     p(c,status,40,104,W-80,11)
 def footer(c,page,note=''):
     c.setStrokeColor(HexColor('#D7E0EA'));c.line(40,42,W-40,42)
-    p(c,'03/11/2026 • Base 4f67f81954b6 • Documentação complementar; não é o PDF final',40,H-32,W-140,9,color=MUTED)
+    p(c,'03/11/2026 | Docker e MySQL validados | Documentação complementar',40,H-32,W-140,9,color=MUTED)
     p(c,str(page),W-85,H-32,45,9,True)
 def notes(c,items,y=680):
     yy=y
