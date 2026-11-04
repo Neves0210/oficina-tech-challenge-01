@@ -55,7 +55,10 @@ for source, target in [("build/coverage/clover.xml", "clover.xml"), ("build/juni
     (DEST / target).write_text(value, encoding="utf-8")
 coverage = (ROOT / "build/docker-coverage.txt").read_text(encoding="utf-8-sig")
 coverage = re.sub(r"\x1b\[[0-9;]*m", "", coverage)
+coverage = "\n".join(line.rstrip() for line in coverage.splitlines()).rstrip() + "\n"
 (DEST / "cobertura-testes.txt").write_text(coverage, encoding="utf-8")
+mysql_output = (DEST / "mysql-testes.txt").read_text(encoding="utf-8-sig")
+(DEST / "mysql-testes.txt").write_text("\n".join(line.rstrip() for line in mysql_output.splitlines()).rstrip() + "\n", encoding="utf-8")
 shutil.make_archive(str(DEST / "cobertura-html"), "zip", ROOT / "build/coverage", "html")
 paths = []
 for folder in ["app", "routes", "database/migrations", "config", "scripts"]:

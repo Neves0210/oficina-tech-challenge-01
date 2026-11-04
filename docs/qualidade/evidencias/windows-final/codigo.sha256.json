@@ -110,7 +110,7 @@
   "routes/web.php": "248c7eeeb43bb61ee4fb6603e52b44843c64f72a841d671bcd41871aab23f970",
   "scripts/build-delivery-pdfs.py": "dbb9c7d69414541b13de15eb39963bfd92bea71225e152ee0e6aecc774de6761",
   "scripts/check-domain-coverage.php": "c6747171a24c404d139b83bc37f351360716331cf28606e73476a82c10d00529",
-  "scripts/collect-delivery-evidence.py": "1340c50d95368aa43ea0b9e893ac051009a1e3e2b4e005f49c9a3ca0db9ccafd",
+  "scripts/collect-delivery-evidence.py": "a6da3ad95503daef483e55c7e79d64f3767945662df418c4fdcb006a73e47573",
   "scripts/finalizar-entrega.ps1": "1e852660a3983765a2ed370b492397f44af2ff7da590ed3d6482d3e92a2b4166",
   "scripts/prepare-demo.php": "58ad03b4f5980ea53067106bc81ebe521d8f6230d6172624bd59b8eca3e67995",
   "scripts/start-local.ps1": "cf7959e2590b3c8f98be456fa4087fc04a3f88d4e449312c421f053ade4ce57e",
