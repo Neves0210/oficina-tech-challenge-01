@@ -1,0 +1,2473 @@
+{
+  "info": {
+    "name": "Oficina | Fluxo guiado completo | 70 chamadas",
+    "description": "Execute somente esta coleção no Runner, em ordem, com banco novo. Demonstra serviço + peça + insumo na mesma OS, total R$ 87,50. Use o ambiente Docker e preencha email/senha localmente. Os 70 passos possuem status esperado e orientação na descrição. Não publique tokens ou credenciais.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8081"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "customer_id",
+      "value": ""
+    },
+    {
+      "key": "vehicle_id",
+      "value": ""
+    },
+    {
+      "key": "service_id",
+      "value": ""
+    },
+    {
+      "key": "parts_id",
+      "value": ""
+    },
+    {
+      "key": "supplies_id",
+      "value": ""
+    },
+    {
+      "key": "order_customer_id",
+      "value": ""
+    },
+    {
+      "key": "order_vehicle_id",
+      "value": ""
+    },
+    {
+      "key": "order_service_id",
+      "value": ""
+    },
+    {
+      "key": "order_id",
+      "value": ""
+    },
+    {
+      "key": "budget_id",
+      "value": ""
+    },
+    {
+      "key": "first_budget_id",
+      "value": ""
+    },
+    {
+      "key": "customer_token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "01 Cadastros iniciais",
+      "item": [
+        {
+          "name": "001 | Obter token administrativo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/auth/token",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{admin_email}}\",\n  \"password\": \"{{admin_password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Passo 001. Execute os anteriores na ordem.\n\nAutentique a conta administrativa criada pelo Artisan. access_token é salvo automaticamente; o JWT desta versão dura 3600 segundos. Não exponha o valor no vídeo.\n\nAutenticação: No Auth. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) { pm.collectionVariables.set(\"access_token\", pm.response.json().access_token); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "002 | Cadastrar cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customers",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Marcos Silveira\",\n  \"document\": \"529.982.247-25\",\n  \"email\": \"cliente@example.test\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 002. Execute os anteriores na ordem.\n\nCadastre os dados fictícios do corpo e confira data.id. O ID será salvo automaticamente para manter o vínculo nas chamadas seguintes.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"customer_id\", pm.response.json().data.id); }",
+                  "pm.test(\"CPF normalizado\", function () { pm.expect(pm.response.json().data.document).to.eql(\"52998224725\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "003 | Consultar cliente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customers/{{customer_id}}",
+            "description": "Passo 003. Execute os anteriores na ordem.\n\nMostre os dados retornados e confira as asserções deste passo. Execute após os passos anteriores para que o ID, o saldo e o estado estejam corretos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "004 | Cadastrar veículo do cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/vehicles",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": {{customer_id}},\n  \"plate\": \"BRA1A23\",\n  \"brand\": \"Honda\",\n  \"model\": \"Civic\",\n  \"year\": 2012\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 004. Execute os anteriores na ordem.\n\nCadastre os dados fictícios do corpo e confira data.id. O ID será salvo automaticamente para manter o vínculo nas chamadas seguintes.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"vehicle_id\", pm.response.json().data.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "005 | Cadastrar serviço",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/services",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Troca de óleo e filtro\",\n  \"price_cents\": 6000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 005. Execute os anteriores na ordem.\n\nCadastre os dados fictícios do corpo e confira data.id. O ID será salvo automaticamente para manter o vínculo nas chamadas seguintes.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", function () { pm.response.to.have.status(201); });",
+                  "if (pm.response.code === 201) { pm.collectionVariables.set(\"service_id\", pm.response.json().data.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "006 | Recusar CPF duplicado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customers",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Marcos Silveira\",\n  \"document\": \"529.982.247-25\",\n  \"email\": \"cliente@example.test\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 006. Execute os anteriores na ordem.\n\nRepita intencionalmente o CPF já cadastrado. A API deve devolver erro de validação em errors.document. HTTP 422 é o resultado correto deste passo.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 422.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 422\", function () { pm.response.to.have.status(422); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "007 | Impedir exclusão de cliente com veículo",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customers/{{customer_id}}",
+            "description": "Passo 007. Execute os anteriores na ordem.\n\nDemonstre a regra de proteção indicada pelo nome da chamada. HTTP 409 é esperado e deve aprovar o teste; não tente corrigir essa recusa alterando o status diretamente.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 409.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", function () { pm.response.to.have.status(409); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "008 | Editar cliente",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customers/{{customer_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Marcos Silveira atualizado\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 008. Execute os anteriores na ordem.\n\nMostre a atualização do cadastro. PUT envia os campos obrigatórios; PATCH altera apenas os campos enviados. Os preços históricos da OS são preservados.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "009 | Listar serviços",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/services",
+            "description": "Passo 009. Execute os anteriores na ordem.\n\nMostre os dados retornados e confira as asserções deste passo. Execute após os passos anteriores para que o ID, o saldo e o estado estejam corretos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "010 | Limpeza - excluir veículo criado",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/vehicles/{{vehicle_id}}",
+            "description": "Passo 010. Execute os anteriores na ordem.\n\nExclua apenas o registro criado no bloco inicial. HTTP 204 significa sucesso sem corpo. A exclusão respeita os vínculos, por isso a ordem dos passos importa.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 204.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "011 | Limpeza - excluir serviço criado",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/services/{{service_id}}",
+            "description": "Passo 011. Execute os anteriores na ordem.\n\nExclua apenas o registro criado no bloco inicial. HTTP 204 significa sucesso sem corpo. A exclusão respeita os vínculos, por isso a ordem dos passos importa.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 204.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "012 | Limpeza - excluir cliente criado",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customers/{{customer_id}}",
+            "description": "Passo 012. Execute os anteriores na ordem.\n\nExclua apenas o registro criado no bloco inicial. HTTP 204 significa sucesso sem corpo. A exclusão respeita os vínculos, por isso a ordem dos passos importa.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 204.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 204\", function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "013 | Confirmar exclusão do cliente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customers/{{customer_id}}",
+            "description": "Passo 013. Execute os anteriores na ordem.\n\nConsulte o cliente que acabou de ser excluído. HTTP 404 confirma que ele não existe mais e é esperado neste passo.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 404.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 404\", function () { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 Materiais e estoque",
+      "item": [
+        {
+          "name": "014 | parts - cadastrar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/parts",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Filtro\", \"unit\": \"unit\", \"price_cents\": 2500}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 014. Execute os anteriores na ordem.\n\nCadastre os dados fictícios do corpo e confira data.id. O script salva o ID para as próximas chamadas. Materiais novos começam com saldo zero.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"parts_id\", pm.response.json().data.id);",
+                  "pm.test(\"Saldo inicial zero\", () => pm.expect(pm.response.json().data.stock_quantity).to.eql(\"0.000\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "015 | parts - consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/parts/{{parts_id}}",
+            "description": "Passo 015. Execute os anteriores na ordem.\n\nMostre os dados retornados e confira as asserções deste passo. Execute após os passos anteriores para que o ID, o saldo e o estado estejam corretos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "016 | parts - listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/parts?per_page=20",
+            "description": "Passo 016. Execute os anteriores na ordem.\n\nMostre os dados retornados e confira as asserções deste passo. Execute após os passos anteriores para que o ID, o saldo e o estado estejam corretos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "017 | parts - atualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/parts/{{parts_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Filtro atualizado\", \"unit\": \"unit\", \"price_cents\": 2500}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 017. Execute os anteriores na ordem.\n\nMostre a atualização do cadastro. PUT envia os campos obrigatórios; PATCH altera apenas os campos enviados. Os preços históricos da OS são preservados.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "018 | parts - entrada",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/parts/{{parts_id}}/stock-movements",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"direction\": \"IN\", \"quantity\": \"2\", \"reason\": \"Compra de demonstração\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 018. Execute os anteriores na ordem.\n\nRegistre uma entrada IN com quantidade positiva e motivo. O saldo e o histórico devem aumentar juntos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "019 | parts - saída",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/parts/{{parts_id}}/stock-movements",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"direction\": \"OUT\", \"quantity\": \"1\", \"reason\": \"Ajuste de demonstração\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 019. Execute os anteriores na ordem.\n\nRegistre uma saída OUT de uma unidade, preservando motivo e autoria. O saldo deve diminuir sem ficar negativo.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "020 | parts - recusar saldo insuficiente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/parts/{{parts_id}}/stock-movements",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"direction\": \"OUT\", \"quantity\": \"999999999\", \"reason\": \"Validação de saldo\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 020. Execute os anteriores na ordem.\n\nDemonstre a regra de proteção indicada pelo nome da chamada. HTTP 409 é esperado e deve aprovar o teste; não tente corrigir essa recusa alterando o status diretamente.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 409.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "021 | parts - histórico",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/parts/{{parts_id}}/stock-movements",
+            "description": "Passo 021. Execute os anteriores na ordem.\n\nMostre entrada e saída na listagem paginada. Neste ponto da sequência, meta.total deve ser 2.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Dois movimentos\", () => pm.expect(pm.response.json().meta.total).to.eql(2));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "022 | parts - preservar histórico",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/parts/{{parts_id}}",
+            "description": "Passo 022. Execute os anteriores na ordem.\n\nDemonstre a regra de proteção indicada pelo nome da chamada. HTTP 409 é esperado e deve aprovar o teste; não tente corrigir essa recusa alterando o status diretamente.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 409.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "023 | parts - inativar",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/parts/{{parts_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"active\": false}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 023. Execute os anteriores na ordem.\n\nDesative o material sem excluir seu histórico. Confira active = false. O material será reativado no bloco da OS quando necessário.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Inativo\", () => pm.expect(pm.response.json().data.active).to.eql(false));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "024 | supplies - cadastrar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Óleo\", \"unit\": \"L\", \"price_cents\": 2500}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 024. Execute os anteriores na ordem.\n\nCadastre os dados fictícios do corpo e confira data.id. O script salva o ID para as próximas chamadas. Materiais novos começam com saldo zero.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"supplies_id\", pm.response.json().data.id);",
+                  "pm.test(\"Saldo inicial zero\", () => pm.expect(pm.response.json().data.stock_quantity).to.eql(\"0.000\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "025 | supplies - consultar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}",
+            "description": "Passo 025. Execute os anteriores na ordem.\n\nMostre os dados retornados e confira as asserções deste passo. Execute após os passos anteriores para que o ID, o saldo e o estado estejam corretos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "026 | supplies - listar",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies?per_page=20",
+            "description": "Passo 026. Execute os anteriores na ordem.\n\nMostre os dados retornados e confira as asserções deste passo. Execute após os passos anteriores para que o ID, o saldo e o estado estejam corretos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "027 | supplies - atualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Óleo atualizado\", \"unit\": \"L\", \"price_cents\": 2500}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 027. Execute os anteriores na ordem.\n\nMostre a atualização do cadastro. PUT envia os campos obrigatórios; PATCH altera apenas os campos enviados. Os preços históricos da OS são preservados.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "028 | supplies - entrada",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}/stock-movements",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"direction\": \"IN\", \"quantity\": \"2.500\", \"reason\": \"Compra de demonstração\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 028. Execute os anteriores na ordem.\n\nRegistre uma entrada IN com quantidade positiva e motivo. O saldo e o histórico devem aumentar juntos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "029 | supplies - saída",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}/stock-movements",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"direction\": \"OUT\", \"quantity\": \"1\", \"reason\": \"Ajuste de demonstração\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 029. Execute os anteriores na ordem.\n\nRegistre uma saída OUT de uma unidade, preservando motivo e autoria. O saldo deve diminuir sem ficar negativo.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "030 | supplies - recusar saldo insuficiente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}/stock-movements",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"direction\": \"OUT\", \"quantity\": \"999999999\", \"reason\": \"Validação de saldo\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 030. Execute os anteriores na ordem.\n\nDemonstre a regra de proteção indicada pelo nome da chamada. HTTP 409 é esperado e deve aprovar o teste; não tente corrigir essa recusa alterando o status diretamente.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 409.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "031 | supplies - histórico",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}/stock-movements",
+            "description": "Passo 031. Execute os anteriores na ordem.\n\nMostre entrada e saída na listagem paginada. Neste ponto da sequência, meta.total deve ser 2.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Dois movimentos\", () => pm.expect(pm.response.json().meta.total).to.eql(2));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "032 | supplies - preservar histórico",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}",
+            "description": "Passo 032. Execute os anteriores na ordem.\n\nDemonstre a regra de proteção indicada pelo nome da chamada. HTTP 409 é esperado e deve aprovar o teste; não tente corrigir essa recusa alterando o status diretamente.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 409.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\", () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "033 | supplies - inativar",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"active\": false}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 033. Execute os anteriores na ordem.\n\nDesative o material sem excluir seu histórico. Confira active = false. O material será reativado no bloco da OS quando necessário.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Inativo\", () => pm.expect(pm.response.json().data.active).to.eql(false));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 Abertura e diagnóstico de OS",
+      "item": [
+        {
+          "name": "034 | Cadastrar cliente da OS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customers",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Empresa da demonstração OS\", \"document\": \"11222333000181\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 034. Execute os anteriores na ordem.\n\nCadastre os dados fictícios do corpo e confira data.id. O ID será salvo automaticamente para manter o vínculo nas chamadas seguintes.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"order_customer_id\",pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "035 | Cadastrar veículo da OS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/vehicles",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"customer_id\": \"{{order_customer_id}}\", \"plate\": \"ZZZ9Z99\", \"brand\": \"Fiat\", \"model\": \"Uno\", \"year\": 2014}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 035. Execute os anteriores na ordem.\n\nCadastre os dados fictícios do corpo e confira data.id. O ID será salvo automaticamente para manter o vínculo nas chamadas seguintes.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"order_vehicle_id\",pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "036 | Cadastrar serviço da OS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/services",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Diagnóstico e troca\", \"price_cents\": 5000}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 036. Execute os anteriores na ordem.\n\nCadastre os dados fictícios do corpo e confira data.id. O ID será salvo automaticamente para manter o vínculo nas chamadas seguintes.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"order_service_id\",pm.response.json().data.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "037 | Reativar insumo para OS",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"active\": true}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 037. Execute os anteriores na ordem.\n\nMostre os dados retornados e confira as asserções deste passo. Execute após os passos anteriores para que o ID, o saldo e o estado estejam corretos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "038 | Reativar peça para OS",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/api/parts/{{parts_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"active\": true}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 038. Execute os anteriores na ordem.\n\nA peça foi inativada na demonstração do catálogo. Reative-a antes de incluir na OS; ela possui uma unidade em estoque.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "039 | Abrir OS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_document\": \"11.222.333/0001-81\",\n  \"vehicle_plate\": \"ZZZ9Z99\",\n  \"complaint\": \"Troca de óleo solicitada\",\n  \"items\": [\n    {\n      \"kind\": \"SERVICE\",\n      \"catalog_id\": \"{{order_service_id}}\",\n      \"quantity\": \"1\"\n    },\n    {\n      \"kind\": \"PART\",\n      \"catalog_id\": \"{{parts_id}}\",\n      \"quantity\": \"1\"\n    },\n    {\n      \"kind\": \"SUPPLY\",\n      \"catalog_id\": \"{{supplies_id}}\",\n      \"quantity\": \"0.5\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 039. Execute os anteriores na ordem.\n\nCrie a OS com serviço de R$ 50, peça de R$ 25 e 0,5 L de insumo a R$ 25/L. Confira Recebida, três itens e items_total_cents = 8750. Ainda não há baixa de estoque.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"order_id\",pm.response.json().data.id);",
+                  "pm.test(\"Recebida\",()=>pm.expect(pm.response.json().data.status).to.eql(\"Recebida\"));",
+                  "pm.test(\"Total exato\",()=>pm.expect(pm.response.json().data.items_total_cents).to.eql(8750));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "040 | Iniciar diagnóstico",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/diagnosis",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"diagnosis\": \"Confirmada necessidade de troca\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 040. Execute os anteriores na ordem.\n\nRegistre o diagnóstico da equipe e confira a transição Recebida para Em diagnóstico. O texto deve estar no corpo JSON.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"Em diagnóstico\",()=>pm.expect(pm.response.json().data.status).to.eql(\"Em diagnóstico\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "041 | Consultar OS",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}",
+            "description": "Passo 041. Execute os anteriores na ordem.\n\nMostre os dados retornados e confira as asserções deste passo. Execute após os passos anteriores para que o ID, o saldo e o estado estejam corretos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "042 | Listar OS",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders",
+            "description": "Passo 042. Execute os anteriores na ordem.\n\nMostre os dados retornados e confira as asserções deste passo. Execute após os passos anteriores para que o ID, o saldo e o estado estejam corretos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "04 Orçamentos versionados",
+      "item": [
+        {
+          "name": "043 | Apresentar versão 1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/budgets",
+            "description": "Passo 043. Execute os anteriores na ordem.\n\nGere e disponibilize a proposta v1 de 8750 centavos. A OS muda para Aguardando aprovação. O orçamento é PENDING.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\",()=>pm.response.to.have.status(201));",
+                  "const d=pm.response.json().data;pm.collectionVariables.set(\"budget_id\",d.id);pm.collectionVariables.set(\"first_budget_id\",d.id);",
+                  "pm.test(\"Total calculado\",()=>pm.expect(pm.response.json().data.total_cents).to.eql(8750));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "044 | Consultar orçamento",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/budgets/{{budget_id}}",
+            "description": "Passo 044. Execute os anteriores na ordem.\n\nMostre os dados retornados e confira as asserções deste passo. Execute após os passos anteriores para que o ID, o saldo e o estado estejam corretos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "045 | Listar versões",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/budgets",
+            "description": "Passo 045. Execute os anteriores na ordem.\n\nConfira o número da versão e a decisão da proposta. Revisões criam novos orçamentos; a proposta anterior continua consultável e não é sobrescrita.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "046 | Recusar duplicação",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/budgets",
+            "description": "Passo 046. Execute os anteriores na ordem.\n\nDemonstre a regra de proteção indicada pelo nome da chamada. HTTP 409 é esperado e deve aprovar o teste; não tente corrigir essa recusa alterando o status diretamente.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 409.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\",()=>pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "047 | Iniciar revisão",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/revise-budget",
+            "description": "Passo 047. Execute os anteriores na ordem.\n\nMostre os dados retornados e confira as asserções deste passo. Execute após os passos anteriores para que o ID, o saldo e o estado estejam corretos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "048 | Apresentar versão 2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/budgets",
+            "description": "Passo 048. Execute os anteriores na ordem.\n\nConfira o número da versão e a decisão da proposta. Revisões criam novos orçamentos; a proposta anterior continua consultável e não é sobrescrita.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\",()=>pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"budget_id\",pm.response.json().data.id);",
+                  "pm.test(\"Nova versão pendente\",()=>{pm.expect(pm.response.json().data.version).to.eql(2);pm.expect(pm.response.json().data.decision).to.eql(\"PENDING\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "049 | Preservar versão anterior",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/budgets/{{first_budget_id}}",
+            "description": "Passo 049. Execute os anteriores na ordem.\n\nConfira o número da versão e a decisão da proposta. Revisões criam novos orçamentos; a proposta anterior continua consultável e não é sobrescrita.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Versão original\",()=>pm.expect(pm.response.json().data.version).to.eql(1));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "050 | Consultar OS aguardando aprovação",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}",
+            "description": "Passo 050. Execute os anteriores na ordem.\n\nMostre os dados retornados e confira as asserções deste passo. Execute após os passos anteriores para que o ID, o saldo e o estado estejam corretos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Aguardando aprovação\",()=>pm.expect(pm.response.json().data.status).to.eql(\"Aguardando aprovação\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "05 Acesso e decisão do cliente",
+      "item": [
+        {
+          "name": "051 | Emitir credencial da OS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/customer-access",
+            "description": "Passo 051. Execute os anteriores na ordem.\n\nComo administrador, emita a credencial específica da OS. customer_token é salvo automaticamente. A resposta deve conter Cache-Control com no-store; não mostre o token na gravação.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\",()=>pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"customer_token\",pm.response.json().data.access_token);",
+                  "pm.test(\"Não armazenar em cache\",()=>pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"no-store\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "052 | Cliente consulta orçamento",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customer/service-orders/{{order_id}}/budgets/{{budget_id}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Passo 052. Execute os anteriores na ordem.\n\nConsulte a visão do cliente com customer_token, restrito à própria OS. Observe status, proposta e histórico sem confundir essa credencial com o JWT administrativo.\n\nAutenticação: Bearer Token {{customer_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "053 | Cliente rejeita proposta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customer/service-orders/{{order_id}}/budgets/{{budget_id}}/decision",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"decision\": \"REJECTED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 053. Execute os anteriores na ordem.\n\nCom o token do cliente, rejeite a versão 2. A rejeição impede execução e preserva a proposta. A OS continua Aguardando aprovação.\n\nAutenticação: Bearer Token {{customer_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "054 | Rejeição mantém etapa",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customer/service-orders/{{order_id}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Passo 054. Execute os anteriores na ordem.\n\nConsulte a visão do cliente com customer_token, restrito à própria OS. Observe status, proposta e histórico sem confundir essa credencial com o JWT administrativo.\n\nAutenticação: Bearer Token {{customer_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Aguardando aprovação\",()=>pm.expect(pm.response.json().data.status).to.eql(\"Aguardando aprovação\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "055 | Equipe inicia revisão",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/revise-budget",
+            "description": "Passo 055. Execute os anteriores na ordem.\n\nMostre os dados retornados e confira as asserções deste passo. Execute após os passos anteriores para que o ID, o saldo e o estado estejam corretos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "056 | Apresentar versão 3",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/budgets",
+            "description": "Passo 056. Execute os anteriores na ordem.\n\nConfira o número da versão e a decisão da proposta. Revisões criam novos orçamentos; a proposta anterior continua consultável e não é sobrescrita.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\",()=>pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set(\"budget_id\",pm.response.json().data.id);",
+                  "pm.test(\"Versão 3 pendente\",()=>{pm.expect(pm.response.json().data.version).to.eql(3);pm.expect(pm.response.json().data.decision).to.eql(\"PENDING\");});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "057 | Recusar decisão de versão antiga",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customer/service-orders/{{order_id}}/budgets/{{first_budget_id}}/decision",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"decision\": \"APPROVED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 057. Execute os anteriores na ordem.\n\nDemonstre a regra de proteção indicada pelo nome da chamada. HTTP 409 é esperado e deve aprovar o teste; não tente corrigir essa recusa alterando o status diretamente.\n\nAutenticação: Bearer Token {{customer_token}}. Status esperado: 409.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\",()=>pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "058 | Cliente aprova proposta vigente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customer/service-orders/{{order_id}}/budgets/{{budget_id}}/decision",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"decision\": \"APPROVED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 058. Execute os anteriores na ordem.\n\nAprove a versão 3 usando a credencial do cliente. Confira decision = APPROVED. A decisão sozinha não inicia a execução.\n\nAutenticação: Bearer Token {{customer_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Aprovado\",()=>pm.expect(pm.response.json().data.decision).to.eql(\"APPROVED\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "059 | Recusar decisão repetida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customer/service-orders/{{order_id}}/budgets/{{budget_id}}/decision",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"decision\": \"APPROVED\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 059. Execute os anteriores na ordem.\n\nDemonstre a regra de proteção indicada pelo nome da chamada. HTTP 409 é esperado e deve aprovar o teste; não tente corrigir essa recusa alterando o status diretamente.\n\nAutenticação: Bearer Token {{customer_token}}. Status esperado: 409.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\",()=>pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "060 | Cliente acompanha antes da execução",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customer/service-orders/{{order_id}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Passo 060. Execute os anteriores na ordem.\n\nConsulte a visão do cliente com customer_token, restrito à própria OS. Observe status, proposta e histórico sem confundir essa credencial com o JWT administrativo.\n\nAutenticação: Bearer Token {{customer_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Sem dados internos\",()=>pm.expect(pm.response.json().data).not.to.have.property(\"customer_id\"));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "06 Execução e entrega",
+      "item": [
+        {
+          "name": "061 | Zerar saldo da demonstração",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}/stock-movements",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"direction\": \"OUT\", \"quantity\": \"1.5\", \"reason\": \"Demonstrar falta de estoque\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 061. Execute os anteriores na ordem.\n\nSaem os 1,5 L que restaram no insumo após entrada de 2,5 L e saída anterior de 1 L. O saldo fica zero para provocar a recusa de início.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\",()=>pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "062 | Recusar início sem estoque",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/start-execution",
+            "description": "Passo 062. Execute os anteriores na ordem.\n\nA ordem está aprovada, mas o insumo está sem saldo. Espere 409. A transação deve preservar o status e também a peça, sem consumo parcial.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 409.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\",()=>pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "063 | Repor estoque",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}/stock-movements",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"direction\": \"IN\", \"quantity\": \"1\", \"reason\": \"Compra para a OS\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Passo 063. Execute os anteriores na ordem.\n\nRegistre entrada de 1 L. Agora há saldo para consumir 0,5 L, além da peça disponível.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 201.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 201\",()=>pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "064 | Iniciar execução aprovada",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/start-execution",
+            "description": "Passo 064. Execute os anteriores na ordem.\n\nInicie a ordem aprovada. Confira Em execução; a peça passa de 1 para 0 unidade, e o insumo passa de 1 para 0,5 L. Baixa e status são atômicos.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Em execução\",()=>pm.expect(pm.response.json().data.status).to.eql(\"Em execução\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "065 | Recusar consumo repetido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/start-execution",
+            "description": "Passo 065. Execute os anteriores na ordem.\n\nDemonstre a regra de proteção indicada pelo nome da chamada. HTTP 409 é esperado e deve aprovar o teste; não tente corrigir essa recusa alterando o status diretamente.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 409.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 409\",()=>pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "066 | Finalizar serviços",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/finish",
+            "description": "Passo 066. Execute os anteriores na ordem.\n\nFinalize uma OS Em execução. Confira Finalizada e o instante finished_at, que encerra a medição do tempo de execução.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Finalizada\",()=>pm.expect(pm.response.json().data.status).to.eql(\"Finalizada\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "067 | Entregar veículo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/deliver",
+            "description": "Passo 067. Execute os anteriores na ordem.\n\nRegistre a retirada da OS Finalizada. Confira Entregue e o instante delivered_at. A espera de retirada não altera o tempo de serviço.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Entregue\",()=>pm.expect(pm.response.json().data.status).to.eql(\"Entregue\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "068 | Cliente acompanha entrega",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/customer/service-orders/{{order_id}}",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Passo 068. Execute os anteriores na ordem.\n\nConsulte a visão do cliente com customer_token, restrito à própria OS. Observe status, proposta e histórico sem confundir essa credencial com o JWT administrativo.\n\nAutenticação: Bearer Token {{customer_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Entrega visível\",()=>pm.expect(pm.response.json().data.status).to.eql(\"Entregue\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "069 | Conferir baixa ligada à OS",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}/stock-movements",
+            "description": "Passo 069. Execute os anteriores na ordem.\n\nConfira a única saída do insumo associada à OS, quantidade 0.500. O teste diferencia o consumo da OS dos ajustes manuais anteriores.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\",()=>pm.response.to.have.status(200));",
+                  "pm.test(\"Baixa única\",()=>{const rows=pm.response.json().data.filter(x=>x.service_order_id===Number(pm.collectionVariables.get(\"order_id\")));pm.expect(rows.length).to.eql(1);pm.expect(rows[0].quantity).to.eql(\"0.500\");});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "07 Indicadores",
+      "item": [
+        {
+          "name": "070 | Tempo médio de execução",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/reports/service-execution-time",
+            "description": "Passo 070. Execute os anteriores na ordem.\n\nConfira orders_count maior que zero e average_seconds não negativo. O tempo pode ser zero numa execução rápida. Não inclui espera pela retirada.\n\nAutenticação: Herdar autenticação da coleção: Bearer {{access_token}}. Status esperado: 200.\n\nA sequência pressupõe banco de ensaio inicialmente vazio. Scripts e IDs já configurados."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Indicador disponível ao administrador\", () => { pm.response.to.have.status(200); const d = pm.response.json().data; pm.expect(d.orders_count).to.be.above(0); pm.expect(d.average_seconds).to.be.at.least(0); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

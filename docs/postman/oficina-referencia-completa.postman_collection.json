@@ -1,0 +1,1316 @@
+{
+  "info": {
+    "name": "Oficina | Referência de todas as rotas | Envio manual",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Catálogo completo para consulta manual. NÃO execute inteiro no Runner. Configure IDs/tokens locais desta coleção; eles não são compartilhados automaticamente com a coleção guiada. Respeite o estado da OS, vínculos e saldo. Consulte a OpenAPI para schemas e respostas."
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8081"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "customer_id",
+      "value": ""
+    },
+    {
+      "key": "vehicle_id",
+      "value": ""
+    },
+    {
+      "key": "service_id",
+      "value": ""
+    },
+    {
+      "key": "parts_id",
+      "value": ""
+    },
+    {
+      "key": "supplies_id",
+      "value": ""
+    },
+    {
+      "key": "order_customer_id",
+      "value": ""
+    },
+    {
+      "key": "order_vehicle_id",
+      "value": ""
+    },
+    {
+      "key": "order_service_id",
+      "value": ""
+    },
+    {
+      "key": "order_id",
+      "value": ""
+    },
+    {
+      "key": "budget_id",
+      "value": ""
+    },
+    {
+      "key": "first_budget_id",
+      "value": ""
+    },
+    {
+      "key": "customer_token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Públicas",
+      "item": [
+        {
+          "name": "GET /up",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/up",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Saúde da aplicação\n\nRespostas documentadas: 200. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        },
+        {
+          "name": "GET /api/openapi",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/openapi",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Especificação OpenAPI\n\nRespostas documentadas: 200. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "auth": {
+              "type": "noauth"
+            }
+          }
+        },
+        {
+          "name": "POST /api/auth/token",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/auth/token",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Obter JWT administrativo (validade de uma hora)\n\nRespostas documentadas: 200, 401, 422, 429. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{admin_email}}\",\n  \"password\": \"{{admin_password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) { pm.collectionVariables.set(\"access_token\", pm.response.json().access_token); }"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "customers",
+      "item": [
+        {
+          "name": "GET /api/customers",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/customers",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Listar clientes\n\nRespostas documentadas: 200, 401, 403, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/customers",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/customers",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Cadastrar\n\nRespostas documentadas: 201, 401, 403, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Empresa de demonstração\",\n  \"document\": \"11222333000181\",\n  \"email\": \"cliente@example.test\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) { pm.collectionVariables.set(\"customer_id\", pm.response.json().data.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/customers/{id}",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/customers/{{customer_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Consultar\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "PUT /api/customers/{id}",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/customers/{{customer_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Atualizar os campos obrigatórios\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Empresa de demonstração\",\n  \"document\": \"11222333000181\",\n  \"email\": \"cliente@example.test\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH /api/customers/{id}",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/api/customers/{{customer_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Atualizar parcialmente\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cadastro atualizado\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/customers/{id}",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/customers/{{customer_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Excluir\n\nRespostas documentadas: 204, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        }
+      ]
+    },
+    {
+      "name": "vehicles",
+      "item": [
+        {
+          "name": "GET /api/vehicles",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/vehicles",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Listar veículos\n\nRespostas documentadas: 200, 401, 403, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/vehicles",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/vehicles",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Cadastrar\n\nRespostas documentadas: 201, 401, 403, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": \"{{customer_id}}\",\n  \"plate\": \"ZZZ9Z99\",\n  \"brand\": \"Fiat\",\n  \"model\": \"Uno\",\n  \"year\": 2014\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) { pm.collectionVariables.set(\"vehicle_id\", pm.response.json().data.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/vehicles/{id}",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/vehicles/{{vehicle_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Consultar\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "PUT /api/vehicles/{id}",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/vehicles/{{vehicle_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Atualizar os campos obrigatórios\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": \"{{customer_id}}\",\n  \"plate\": \"ZZZ9Z99\",\n  \"brand\": \"Fiat\",\n  \"model\": \"Uno\",\n  \"year\": 2014\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH /api/vehicles/{id}",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/api/vehicles/{{vehicle_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Atualizar parcialmente\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"Uno atualizado\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/vehicles/{id}",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/vehicles/{{vehicle_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Excluir\n\nRespostas documentadas: 204, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        }
+      ]
+    },
+    {
+      "name": "services",
+      "item": [
+        {
+          "name": "GET /api/services",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/services",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Listar serviços\n\nRespostas documentadas: 200, 401, 403, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/services",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/services",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Cadastrar\n\nRespostas documentadas: 201, 401, 403, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Diagnóstico e troca\",\n  \"price_cents\": 5000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) { pm.collectionVariables.set(\"service_id\", pm.response.json().data.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/services/{id}",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/services/{{service_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Consultar\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "PUT /api/services/{id}",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/services/{{service_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Atualizar os campos obrigatórios\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Diagnóstico e troca\",\n  \"price_cents\": 5000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH /api/services/{id}",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/api/services/{{service_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Atualizar parcialmente\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cadastro atualizado\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/services/{id}",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/services/{{service_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Excluir\n\nRespostas documentadas: 204, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        }
+      ]
+    },
+    {
+      "name": "parts",
+      "item": [
+        {
+          "name": "GET /api/parts",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/parts",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Listar peças\n\nRespostas documentadas: 200, 401, 403, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/parts",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/parts",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Cadastrar peças\n\nRespostas documentadas: 201, 401, 403, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Filtro\",\n  \"unit\": \"unit\",\n  \"price_cents\": 2500\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) { pm.collectionVariables.set(\"parts_id\", pm.response.json().data.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/parts/{id}",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/parts/{{parts_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Consultar\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "PUT /api/parts/{id}",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/parts/{{parts_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Atualizar os campos obrigatórios\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Filtro\",\n  \"unit\": \"unit\",\n  \"price_cents\": 2500\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH /api/parts/{id}",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/api/parts/{{parts_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Atualizar parcialmente\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"active\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/parts/{id}",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/parts/{{parts_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Excluir\n\nRespostas documentadas: 204, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "GET /api/parts/{id}/stock-movements",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/parts/{{parts_id}}/stock-movements",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Consultar histórico de estoque\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/parts/{id}/stock-movements",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/parts/{{parts_id}}/stock-movements",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Registrar entrada ou saída\n\nRespostas documentadas: 201, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"direction\": \"IN\",\n  \"quantity\": \"2\",\n  \"reason\": \"Entrada de demonstração\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "supplies",
+      "item": [
+        {
+          "name": "GET /api/supplies",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/supplies",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Listar insumos\n\nRespostas documentadas: 200, 401, 403, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/supplies",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/supplies",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Cadastrar insumos\n\nRespostas documentadas: 201, 401, 403, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Óleo\",\n  \"unit\": \"L\",\n  \"price_cents\": 2500\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) { pm.collectionVariables.set(\"supplies_id\", pm.response.json().data.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/supplies/{id}",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Consultar\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "PUT /api/supplies/{id}",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Atualizar os campos obrigatórios\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Óleo\",\n  \"unit\": \"L\",\n  \"price_cents\": 2500\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PATCH /api/supplies/{id}",
+          "request": {
+            "method": "PATCH",
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Atualizar parcialmente\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"active\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE /api/supplies/{id}",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Excluir\n\nRespostas documentadas: 204, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "GET /api/supplies/{id}/stock-movements",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}/stock-movements",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Consultar histórico de estoque\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/supplies/{id}/stock-movements",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/supplies/{{supplies_id}}/stock-movements",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Registrar entrada ou saída\n\nRespostas documentadas: 201, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"direction\": \"IN\",\n  \"quantity\": \"2.500\",\n  \"reason\": \"Entrada de demonstração\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "service-orders",
+      "item": [
+        {
+          "name": "GET /api/service-orders",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/service-orders",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Listar OS\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/service-orders",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/service-orders",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Abrir OS\n\nRespostas documentadas: 201, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_document\": \"11.222.333/0001-81\",\n  \"vehicle_plate\": \"ZZZ9Z99\",\n  \"complaint\": \"Troca de óleo e filtro\",\n  \"items\": [\n    {\n      \"kind\": \"SERVICE\",\n      \"catalog_id\": \"{{service_id}}\",\n      \"quantity\": \"1\"\n    },\n    {\n      \"kind\": \"PART\",\n      \"catalog_id\": \"{{parts_id}}\",\n      \"quantity\": \"1\"\n    },\n    {\n      \"kind\": \"SUPPLY\",\n      \"catalog_id\": \"{{supplies_id}}\",\n      \"quantity\": \"0.5\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) { pm.collectionVariables.set(\"order_id\", pm.response.json().data.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/service-orders/{id}",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/service-orders/{{order_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Detalhar OS e histórico\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/service-orders/{id}/diagnosis",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/diagnosis",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Registrar diagnóstico e iniciar etapa\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"diagnosis\": \"Confirmada necessidade de troca\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PUT /api/service-orders/{id}/items",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/items",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Substituir itens antes do orçamento\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"kind\": \"SERVICE\",\n      \"catalog_id\": \"{{service_id}}\",\n      \"quantity\": \"1\"\n    },\n    {\n      \"kind\": \"PART\",\n      \"catalog_id\": \"{{parts_id}}\",\n      \"quantity\": \"1\"\n    },\n    {\n      \"kind\": \"SUPPLY\",\n      \"catalog_id\": \"{{supplies_id}}\",\n      \"quantity\": \"0.5\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET /api/service-orders/{id}/budgets",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/budgets",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Listar versões do orçamento\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/service-orders/{id}/budgets",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/budgets",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Calcular e apresentar orçamento\n\nRespostas documentadas: 201, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) { pm.collectionVariables.set(\"budget_id\", pm.response.json().data.id); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/service-orders/{id}/budgets/{budget}",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/budgets/{{budget_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Consultar versão da própria OS\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/service-orders/{id}/revise-budget",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/revise-budget",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Voltar ao diagnóstico para revisar proposta\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/service-orders/{id}/customer-access",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/customer-access",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Emitir ou rotacionar credencial da OS\n\nRespostas documentadas: 201, 401, 403, 404, 409, 422, 429. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code >= 200 && pm.response.code < 300) { pm.collectionVariables.set(\"customer_token\", pm.response.json().data.access_token); }"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE /api/service-orders/{id}/customer-access",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/customer-access",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Revogar credencial da OS\n\nRespostas documentadas: 204, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/service-orders/{id}/start-execution",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/start-execution",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Iniciar execução aprovada e consumir estoque\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/service-orders/{id}/finish",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/finish",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Finalizar execução\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        },
+        {
+          "name": "POST /api/service-orders/{id}/deliver",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/service-orders/{{order_id}}/deliver",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Registrar entrega do veículo\n\nRespostas documentadas: 200, 401, 403, 404, 409, 422. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cliente da OS",
+      "item": [
+        {
+          "name": "GET /api/customer/service-orders/{id}",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/customer/service-orders/{{order_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Acompanhar a própria OS\n\nRespostas documentadas: 200, 401, 404, 409, 422, 429. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET /api/customer/service-orders/{id}/budgets/{budget}",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/customer/service-orders/{{order_id}}/budgets/{{budget_id}}",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Consultar proposta da própria OS\n\nRespostas documentadas: 200, 401, 404, 409, 422, 429. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_token}}",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST /api/customer/service-orders/{id}/budgets/{budget}/decision",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/customer/service-orders/{{order_id}}/budgets/{{budget_id}}/decision",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Aprovar ou rejeitar proposta vigente\n\nRespostas documentadas: 200, 401, 404, 409, 422, 429. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado.",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{customer_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"decision\": \"APPROVED\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "reports",
+      "item": [
+        {
+          "name": "GET /api/reports/service-execution-time",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/reports/service-execution-time",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "description": "ENVIO MANUAL. Tempo médio entre início e finalização das OS finalizadas ou entregues\n\nRespostas documentadas: 200, 401, 403. Configure IDs locais e respeite as regras da OS. Exemplos de corpo são editáveis; não constituem um fluxo ordenado."
+          }
+        }
+      ]
+    }
+  ]
+}

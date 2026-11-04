@@ -71,6 +71,7 @@ O checkout da CI usa a pasta `oficina-avaliação` para exercitar também a regr
 - [Execução, finalização e entrega](docs/api-execucao.md)
 - [Tempo médio de execução](docs/api-indicadores.md)
 - [Especificação OpenAPI](docs/openapi.json), também disponível em `GET /api/openapi`
+- [Postman completo: importação, roteiro detalhado, 70 chamadas e todas as rotas](docs/postman/README.md)
 
 - [Linguagem ubíqua](docs/ddd/linguagem-ubiqua.md)
 - [Regras da ordem de serviço](docs/ddd/regras-da-os.md)

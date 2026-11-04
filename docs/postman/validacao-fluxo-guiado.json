@@ -1,0 +1,21 @@
+{
+  "requests": {
+    "total": 70,
+    "pending": 0,
+    "failed": 0
+  },
+  "assertions": {
+    "total": 94,
+    "pending": 0,
+    "failed": 0
+  },
+  "failures": 0,
+  "database": "MySQL em projeto Compose separado",
+  "os_items": [
+    "SERVICE",
+    "PART",
+    "SUPPLY"
+  ],
+  "expected_total_cents": 8750,
+  "collection": "oficina-fluxo-guiado.postman_collection.json"
+}
