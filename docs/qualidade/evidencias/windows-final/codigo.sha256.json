@@ -102,7 +102,7 @@
   "database/migrations/2026_11_03_000003_create_order_budgets.php": "4e27672c93a8fa7b6428a2d9e78b331e2f2f5179dda6f8c34a10bf64cdcc2c53",
   "database/migrations/2026_11_03_000004_create_order_customer_access.php": "5a2331c91c438d593f2cdaf30c4d019eccf7eb0adc78c4c0d524cdf2f34ade5f",
   "database/migrations/2026_11_03_000005_link_stock_consumption_to_orders.php": "0dc897a360408d4aee65c4a08c5033b008053d9bcfb73a32ac923de23122d7cb",
-  "docker-compose.yml": "a04c798fbd01d91927ce9e9fe16475d096f3d0a3c146cab728748defbc563872",
+  "docker-compose.yml": "85e818e6a0ecd58dddc7a8b2e380dd71d60c93aebd7a282c53b57647561b1c50",
   "Dockerfile": "c3b13f8d2da67ce137780cda041695c265684b9b51cd2f30d833c3dd04732e44",
   "phpunit.xml": "75a49fa167a0f26954701448601d4779defd884f7170e1cf0eb3fe59d5e98dad",
   "routes/api.php": "601734fbdf1c061ebf33565e160e84a1e2adfcd2c7593276e16742fa8f71ed5b",

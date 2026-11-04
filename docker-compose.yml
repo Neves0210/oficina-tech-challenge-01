@@ -2,6 +2,7 @@ name: oficina-fase1
 
 services:
   app:
+    image: oficina-fase1-app
     build: .
     env_file: .env
     environment:
