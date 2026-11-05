@@ -2,6 +2,10 @@
 
 Repositório do MVP de backend da oficina mecânica para o Tech Challenge da FIAP.
 
+## Vídeo da apresentação
+
+[Assista à apresentação do projeto no YouTube](https://youtu.be/HurZ7gWk8sw).
+
 A implementação atual oferece APIs administrativas de clientes, veículos, serviços, peças e insumos, protegidas por JWT, com validação de CPF/CNPJ e placa. Peças e insumos têm saldo e histórico de entradas/saídas em transação. O atendimento inclui abertura e diagnóstico de OS, orçamento versionado, decisão do cliente e execução com baixa atômica de materiais até finalização e entrega. O cliente acompanha a própria OS por credencial específica. A API administrativa também informa o tempo médio das OS concluídas.
 
 Pré-requisitos: PHP 8.4.1 ou superior, Composer e as extensões indicadas por `composer check-platform-reqs`. O banco escolhido para a solução é MySQL; a execução rápida e os testes locais abaixo usam SQLite, que exige `pdo_sqlite`.
@@ -24,7 +28,7 @@ docker compose run --rm tests php scripts/verify-mysql-concurrency.php
 docker compose exec -T app composer audit --locked
 ```
 
-O serviço de testes usa banco MySQL separado e cache em memória. [Guia Docker e Postman](docs/entrega/docker-windows.md). [Validação final Windows/MySQL](docs/qualidade/fechamento-windows.md). [Análise final de vulnerabilidades](docs/seguranca/fechamento-windows.md). [Vídeo da entrega](docs/entrega/video.md).
+O serviço de testes usa banco MySQL separado e cache em memória. [Guia Docker e Postman](docs/entrega/docker-windows.md). [Validação final Windows/MySQL](docs/qualidade/fechamento-windows.md). [Análise final de vulnerabilidades](docs/seguranca/fechamento-windows.md). [Vídeo da entrega](https://youtu.be/HurZ7gWk8sw).
 
 Arquitetura: monólito em camadas, com HTTP, aplicação, domínio e infraestrutura. Tecnologias: PHP 8.4+, Laravel 13, JWT, MySQL 8.4, PHPUnit, PCOV, Nginx e Docker Compose. MySQL foi escolhido por integridade referencial, transações e bloqueios de linha para coordenar OS e estoque; veja o [ADR do banco](docs/arquitetura/adr/002-banco-relacional.md).
 
@@ -94,4 +98,4 @@ Docker/Compose, execução MySQL, fluxo HTTP e concorrência foram validados no 
 Os PDFs de DDD são anexos de apoio. O PDF acadêmico com campos editáveis e o roteiro
 de 14m30s são gerados por `scripts/build-delivery-pdfs.py`; o procedimento para
 inserir o link real do vídeo está em [finalização da entrega](docs/entrega/finalizar-pdf.md).
-O vídeo ainda deve ser gravado e publicado pelo integrante.
+O vídeo da apresentação está disponível no [YouTube](https://youtu.be/HurZ7gWk8sw).
